@@ -1,0 +1,16 @@
+{
+  "name": "password-hash-recovery",
+  "version": "1.0.0",
+  "description": "Smart contract for recovering password hashes",
+  "scripts": {
+    "init": "$(npm bin)/truffle init",
+    "compile": "$(npm bin)/truffle compile",
+    "test": "$(npm bin)/truffle test"
+  },
+  "dependencies": {
+    "truffle": "^3.4.9",
+    "ethereumjs-testrpc": "^4.1.1"
+  },
+  "author": "Vincent Chu",
+  "license": "MIT"
+}
