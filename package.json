@@ -8,8 +8,8 @@
     "test": "$(npm bin)/truffle test"
   },
   "dependencies": {
-    "truffle": "^3.4.9",
-    "ethereumjs-testrpc": "^4.1.1"
+    "ethereumjs-testrpc": "^4.1.1",
+    "truffle": "^3.4.9"
   },
   "author": "Vincent Chu",
   "license": "MIT"
