@@ -5,11 +5,17 @@
   "scripts": {
     "init": "$(npm bin)/truffle init",
     "compile": "$(npm bin)/truffle compile",
-    "test": "$(npm bin)/truffle test"
+    "start": "$(npm bin)/testrpc",
+    "test": "$(npm bin)/truffle test",
+    "migrate": "$(npm bin)/truffle migrate"
   },
-  "dependencies": {
+  "dependencies": {},
+  "devDependencies": {
+    "truffle": "^3.4.9",
     "ethereumjs-testrpc": "^4.1.1",
-    "truffle": "^3.4.9"
+    "eslint": "^3.12.0",
+    "eslint-config-google": "^0.7.1",
+    "eslint-config-recommended": "^1.5.0"
   },
   "author": "Vincent Chu",
   "license": "MIT"
