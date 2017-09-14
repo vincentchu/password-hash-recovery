@@ -5,7 +5,7 @@
   "scripts": {
     "init": "$(npm bin)/truffle init",
     "compile": "$(npm bin)/truffle compile",
-    "start": "$(npm bin)/testrpc",
+    "start": "$(npm bin)/testrpc --mnemonic='color coral ozone benefit purse model consider warrior soap host result symptom'",
     "test": "$(npm bin)/truffle test",
     "migrate": "$(npm bin)/truffle migrate"
   },
