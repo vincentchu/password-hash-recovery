@@ -1,9 +1,13 @@
+const DeployParams = require('../deploy-params.js')
+
 const PasswordHashRecovery = artifacts.require('./PasswordHashRecovery.sol')
 
 module.exports = (deployer) => {
+  const params = DeployParams[deployer.network]
+
   deployer.deploy(
     PasswordHashRecovery,
-    '0xa9993e364706816aba3e25717850c26c9cd0d89d',
-    { value: '218000000000' }
+    params.hash,
+    { value: params.bounty }
   )
 }
