@@ -1,4 +1,6 @@
+
 const PasswordHashRecovery = artifacts.require('./PasswordHashRecovery.sol')
+const ExpectedBounty = 218000000000
 const DefaultGasPrice = 100000000000
 
 contract('PasswordHashRecovery', (accounts) => {
@@ -39,35 +41,48 @@ contract('PasswordHashRecovery', (accounts) => {
     const alice = accounts[0]
     const initBalance = web3.eth.getBalance(alice)
 
-    console.log('GASPRICE', web3.eth.gasPrice)
-
     PasswordHashRecovery.deployed()
       .then((instance) => instance.solve('bad password', { from: alice }))
       .then((tx) => {
-        console.log('TX', tx)
+        const {
+          receipt: { gasUsed },
+          logs,
+        } = tx
+
+        const [ { event, args } ] = logs
 
         const afterBalance = web3.eth.getBalance(alice)
         const difference = initBalance.minus(afterBalance).toNumber()
 
-        console.log('INIT', initBalance)
-        console.log('AFTER', afterBalance)
+        assert.equal(difference, DefaultGasPrice * gasUsed, 'Bounty was transferred')
+        assert.equal(logs.length, 1, 'Too many events emitted')
+        assert.equal(event, 'AttemptFailed', 'Wrong event type emitted')
+        assert.equal(args.password, 'bad password', 'Wrong password emitted')
 
+        done()
+      })
+  })
+
+  it('should reward success solve attempts', (done) => {
+    const bob = accounts[1]
+    const initialBalance = web3.eth.getBalance(bob)
+
+    PasswordHashRecovery.deployed()
+      .then((instance) => instance.solve('abc', { from: bob }))
+      .then((tx) => {
         const {
           receipt: { gasUsed },
-          logs: [ { event, args } ],
+          logs,
         } = tx
 
-        console.log('GAS USED', gasUsed)
-        console.log('EVENT', event)
-        console.log('ARGS', args)
+        const [ { event, args } ] = logs
+        const afterBalance = web3.eth.getBalance(bob)
+        const difference = afterBalance.minus(initialBalance).toNumber()
 
-        console.log(difference)
-
-        assert.equal(difference, DefaultGasPrice * gasUsed, 'Bounty was transferred')
-
-
-
-
+        assert.equal(difference, ExpectedBounty - DefaultGasPrice * gasUsed, 'Bounty not transferred')
+        assert.equal(logs.length, 1, 'Too many events emitted')
+        assert.equal(event, 'PasswordCracked', 'Wrong event type emitted')
+        assert.equal(args.password, 'abc', 'Wrong password emitted')
 
         done()
       })
