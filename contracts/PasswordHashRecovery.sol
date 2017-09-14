@@ -6,9 +6,9 @@ contract PasswordHashRecovery is SHA1 {
   event PasswordCracked(address crackedBy, uint256 bounty, string password, bytes hash);
   event AttemptFailed(address source, string password, bytes hash);
 
-  address owner;
-  uint256 bounty;
-  bytes20 hash;
+  address public owner;
+  uint256 public bounty;
+  bytes20 public hash;
 
   function PasswordHashRecovery(bytes20 _hash) payable {
     owner = msg.sender;
