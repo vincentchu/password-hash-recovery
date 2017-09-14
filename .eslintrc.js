@@ -40,10 +40,15 @@ module.exports = {
     'react/jsx-sort-props': 'off',
     'react/no-unused-prop-types': 'off',
     'react/jsx-handler-names': 'off',
+    'max-len': 'off',
   },
   globals: {
     Position: true,
     ReactClass: true,
     artifacts: true,
+    it: true,
+    contract: true,
+    assert: true,
+    web3:true,
   }
 };
