@@ -1,17 +1,13 @@
 // @flow
 import React from 'react'
-import Contract from './Contract'
+import { connect } from 'react-redux'
+import ContractView from './ContractView'
 
-const TestContract = {
-  title: 'Easy Difficulty',
-  panelStyle: 'warning',
-  contractAddress: '0x9ad463357ddd5fea6b0150a9948a4fc447c07346',
-  passwordSha1Hash: '0xa9993e364706816aba3e25717850c26c9cd0d89d',
-}
+import type { Contract, ContractStore } from '../state/contracts'
 
-const DeployedContracts = [0, 1, 2].map(() => TestContract)
-
-const Home = () => (
+const Home = (props: {
+  contracts: Contract[],
+}) => (
   <div>
     <div className="page-header">
       <h1>Smart Contracts for Cracking Passwords</h1>
@@ -39,13 +35,21 @@ const Home = () => (
     </div>
 
     <div className="row">
-      { DeployedContracts.map((contractProps, i) => (
-        <div className="col-md-4">
-          <Contract key={i} {...contractProps} />
+      { props.contracts.map((contractProps, i) => (
+        <div key={i} className="col-md-4">
+          <ContractView {...contractProps} />
         </div>
       )) }
     </div>
   </div>
 )
 
-export default Home
+const mapStateToProps = (state: {
+  contracts: ContractStore,
+}) => {
+  const contracts = state.contracts.development
+
+  return { contracts }
+}
+
+export default connect(mapStateToProps)(Home)

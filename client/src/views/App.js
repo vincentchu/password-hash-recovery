@@ -10,7 +10,7 @@ import './App.css'
 
 class App extends React.Component {
   componentWillMount() {
-    this.props.dispatch(checkWeb3())
+    setTimeout(() => this.props.dispatch(checkWeb3()), 200)
   }
 
   props: {

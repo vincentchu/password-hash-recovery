@@ -14,21 +14,21 @@ const truncateAddr = (addr: string): string => {
 
 const linkForAddr = (addr: string) => `https://etherscan.io/address/${addr}`
 
-const Contract = (props: {
+const ContractView = (props: {
   panelStyle: string,
   title: string,
   contractAddress: string,
   passwordSha1Hash: string,
 }) => {
-  const { panelStyle, title, contractAddress } = props
+  const { panelStyle, title, contractAddress, passwordSha1Hash } = props
 
   const header = (<h3>{ title }</h3>)
-  console.log('FOO', PasswordHashRecovery)
-  window.Contract = PasswordHashRecovery
+  // console.log('FOO', PasswordHashRecovery)
+  // window.Contract = PasswordHashRecovery
 
-  const contract = window.web3.eth.contract(PasswordHashRecovery.abi)
-  const deployedContract = contract.at(contractAddress)
-  window.deployedContract = deployedContract
+  // const contract = window.web3.eth.contract(PasswordHashRecovery.abi)
+  // const deployedContract = contract.at(contractAddress)
+  // window.deployedContract = deployedContract
 
   return (
     <div>
@@ -42,7 +42,7 @@ const Contract = (props: {
               </a>
             </dd>
             <dt>Password SHA1 Hash</dt>
-            <dd>0xa9993e364706816aba3e25717850c26c9cd0d89d</dd>
+            <dd>{ truncateAddr(passwordSha1Hash) }</dd>
           </dl>
         </div>
       </Panel>
@@ -50,4 +50,4 @@ const Contract = (props: {
   )
 }
 
-export default Contract
+export default ContractView
