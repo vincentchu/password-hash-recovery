@@ -2,9 +2,8 @@
 import React from 'react'
 import { compose } from 'ramda'
 import { connect } from 'react-redux'
-import { Button, ButtonToolbar, Panel } from 'react-bootstrap'
-import { Field, reduxForm, startAsyncValidation, stopAsyncValidation } from 'redux-form'
-
+import { Button, ButtonToolbar, Glyphicon, Panel } from 'react-bootstrap'
+import { Field, formValues, reduxForm, startAsyncValidation, stopAsyncValidation } from 'redux-form'
 import classnames from 'classnames'
 import loadContract from './load-contract'
 
@@ -50,28 +49,33 @@ const ContractView = (props: {
   bounty: ?BigNumber,
   deployedContract: ?Object,
   dispatch: Function,
+  error: bool,
+  submitting: bool,
+  pristine: bool,
+  asyncValidating: bool,
+  plaintext: ?string,
 }) => {
-  const {contract, bounty, deployedContract, handleSubmit, dispatch } = props
+  const {
+    contract, bounty, deployedContract, dispatch, plaintext,
+    handleSubmit, error, submitting, pristine, asyncValidating, ...propz
+  } = props
   const { title, panelStyle, contractAddress, passwordSha1Hash } = contract
-  console.log('>>>', props)
+  console.log('laintext', plaintext)
+  console.log('XX', propz)
 
-  const header = (<h3>{ title }</h3>)
   const onSubmit = (values) => console.log('VALS', values)
-
   const onTest = () => {
     if (deployedContract) {
       dispatch(startAsyncValidation('contract'))
-      deployedContract.solve.call('foo', (err, result) => {
-        console.log('ERR', err)
-        console.log('RESULT', result)
-
-        const errors = result ? {} : { plaintext: 'did not match' }
+      deployedContract.solve.call(plaintext, (err, result) => {
+        const errors = result ? {} : { plaintext: 'Incorrect plaintext!' }
 
         dispatch(stopAsyncValidation('contract', errors))
-
       })
     }
   }
+
+  const header = (<h3>{ title }</h3>)
 
   return (
     <div>
@@ -100,14 +104,19 @@ const ContractView = (props: {
               component={InputField}
             />
 
-            <ButtonToolbar>
-              <Button onClick={onTest}>
-                Test
-              </Button>
-              <Button>
-                Submit
-              </Button>
-            </ButtonToolbar>
+            <div className="button-bar">
+              <ButtonToolbar>
+                <Button onClick={onTest} disabled={submitting || pristine || asyncValidating}>
+                  Test
+                </Button>
+                <Button disabled={submitting || pristine || error || asyncValidating}>
+                  Submit
+                </Button>
+              </ButtonToolbar>
+              <div className={classnames('status', asyncValidating && 'show')}>
+                <Glyphicon glyph="refresh" />
+              </div>
+            </div>
           </form>
         </div>
       </Panel>
@@ -118,5 +127,6 @@ const ContractView = (props: {
 export default compose(
   loadContract,
   connect(),
-  reduxForm({ form: 'contract' })
+  reduxForm({ form: 'contract' }),
+  formValues('plaintext')
 )(ContractView)
