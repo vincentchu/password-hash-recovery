@@ -1,9 +1,9 @@
 // @flow
 import React from 'react'
 import { Panel } from 'react-bootstrap'
+import loadContract from './load-contract'
 
-// $FlowFixMe - Flow can't see into the truffle dir
-import PasswordHashRecovery from '../../../truffle/build/contracts/PasswordHashRecovery.json' // eslint-disable-line
+import type { BigNumber } from 'big-number'
 
 const truncateAddr = (addr: string): string => {
   const firstPart = addr.slice(0, 8)
@@ -19,16 +19,12 @@ const ContractView = (props: {
   title: string,
   contractAddress: string,
   passwordSha1Hash: string,
+  bounty: ?BigNumber,
+  deployedContract: ?Object,
 }) => {
-  const { panelStyle, title, contractAddress, passwordSha1Hash } = props
+  const { panelStyle, title, contractAddress, passwordSha1Hash, bounty, deployedContract } = props
 
   const header = (<h3>{ title }</h3>)
-  // console.log('FOO', PasswordHashRecovery)
-  // window.Contract = PasswordHashRecovery
-
-  // const contract = window.web3.eth.contract(PasswordHashRecovery.abi)
-  // const deployedContract = contract.at(contractAddress)
-  // window.deployedContract = deployedContract
 
   return (
     <div>
@@ -41,8 +37,12 @@ const ContractView = (props: {
                 { truncateAddr(contractAddress) }
               </a>
             </dd>
+
             <dt>Password SHA1 Hash</dt>
             <dd>{ truncateAddr(passwordSha1Hash) }</dd>
+
+            <dt>Bounty</dt>
+            <dd>{ bounty && bounty.valueOf() }</dd>
           </dl>
         </div>
       </Panel>
@@ -50,4 +50,4 @@ const ContractView = (props: {
   )
 }
 
-export default ContractView
+export default loadContract(ContractView)

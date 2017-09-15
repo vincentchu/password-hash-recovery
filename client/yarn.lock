@@ -929,6 +929,10 @@ beeper@^1.0.0:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/beeper/-/beeper-1.1.1.tgz#e6d5ea8c5dad001304a70b22638447f69cb2f809"
 
+big-number@^0.4.0:
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/big-number/-/big-number-0.4.0.tgz#ca84d674402009da76eac9ff6f9f04baf2a95c47"
+
 big.js@^3.1.3:
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/big.js/-/big.js-3.2.0.tgz#a5fc298b81b9e0dca2e458824784b65c52ba588e"
