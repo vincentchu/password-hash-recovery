@@ -1,13 +1,10 @@
 // @flow
 import React from 'react'
 import App from './views/App'
+import Home from './views/Home'
 import NotFound from './views/NotFound'
 
 export const ROUTE_TRANSITION = 'routes/ROUTE_TRANSITION'
-
-const Home = () => (
-  <h1>This is home</h1>
-)
 
 const makeRoute = (
   path: string,
