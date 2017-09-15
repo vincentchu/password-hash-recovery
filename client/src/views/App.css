@@ -14,14 +14,17 @@
 }
 
 .status {
-  opacity: 0;
   margin-left: 3px;
   padding: 7px;
+}
+
+.spinner {
+  opacity: 0;
   animation: spin 2s linear infinite;
   transition: opacity 500ms ease;
 }
 
-.status.show {
+.spinner.show {
   opacity: 1;
   transition: opacity 500ms ease;
 }

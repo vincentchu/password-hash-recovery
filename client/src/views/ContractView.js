@@ -68,7 +68,7 @@ const ContractView = (props: {
     if (deployedContract) {
       dispatch(startAsyncValidation('contract'))
       deployedContract.solve.call(plaintext, (err, result) => {
-        const errors = result ? {} : { plaintext: 'Incorrect plaintext!' }
+        const errors = result ? {} : { plaintext: 'Incorrect plaintext' }
 
         dispatch(stopAsyncValidation('contract', errors))
       })
@@ -113,9 +113,12 @@ const ContractView = (props: {
                   Submit
                 </Button>
               </ButtonToolbar>
-              <div className={classnames('status', asyncValidating && 'show')}>
-                <Glyphicon glyph="refresh" />
+              <div className="status">
+                <div className={classnames('spinner', asyncValidating && 'show')}>
+                  <Glyphicon glyph="refresh" />
+                </div>
               </div>
+
             </div>
           </form>
         </div>
