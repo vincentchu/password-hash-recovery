@@ -1,6 +1,8 @@
 // @flow
 import React from 'react'
 import { Panel } from 'react-bootstrap'
+import { Field, reduxForm } from 'redux-form'
+import classnames from 'classnames'
 import loadContract from './load-contract'
 
 import type { BigNumber } from 'big-number'
@@ -14,6 +16,31 @@ const truncateAddr = (addr: string): string => {
 
 const linkForAddr = (addr: string) => `https://etherscan.io/address/${addr}`
 
+const InputField = (props: {
+  input: Object,
+  name: string,
+  placeholder: string,
+  meta: { error: ?string }
+}) => {
+  const {
+    input,
+    name,
+    placeholder,
+    meta: { error },
+  } = props
+  console.log('PROPS', props)
+
+  return (
+    <div className={classnames('form-group', error && 'has-error')}>
+      <label className="control-label" htmlFor={name}>
+        { placeholder }
+      </label>
+      <input className="form-control" placeholder={placeholder} {...input} />
+      <span className="help-block">{ error }</span>
+    </div>
+  )
+}
+
 const ContractView = (props: {
   panelStyle: string,
   title: string,
@@ -22,9 +49,11 @@ const ContractView = (props: {
   bounty: ?BigNumber,
   deployedContract: ?Object,
 }) => {
-  const { panelStyle, title, contractAddress, passwordSha1Hash, bounty, deployedContract } = props
+  const { panelStyle, title, contractAddress, passwordSha1Hash, bounty, deployedContract, handleSubmit } = props
+  console.log('>>>', props)
 
   const header = (<h3>{ title }</h3>)
+  const onSubmit = (values) => console.log('VALS', values)
 
   return (
     <div>
@@ -45,9 +74,18 @@ const ContractView = (props: {
             <dd>{ bounty && bounty.valueOf() }</dd>
           </dl>
         </div>
+
+        <div>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <Field
+              id="plaintext" name="plaintext" placeholder="Plaintext Password"
+              component={InputField}
+            />
+          </form>
+        </div>
       </Panel>
     </div>
   )
 }
 
-export default loadContract(ContractView)
+export default loadContract(reduxForm({ form: 'contract' })(ContractView))

@@ -7,7 +7,7 @@ import { reducer as contractsReducer } from './state/contracts'
 
 const logger = createLogger()
 const reducer = combineReducers({
-  forms: formReducer,
+  form: formReducer,
   session: sessionReducer,
   contracts: contractsReducer,
 })

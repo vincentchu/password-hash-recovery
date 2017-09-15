@@ -1,8 +1,6 @@
 // @flow
 import React from 'react'
-import { compose } from 'ramda'
 import { connect } from 'react-redux'
-import { reduxForm } from 'redux-form'
 
 import type { SessionStore } from '../state/session'
 import type { BigNumber } from 'big-number'
@@ -71,13 +69,7 @@ const loadContract = (BaseComponent: Function | typeof React.Component) => {
     }
   }
 
-  const randomId = Math.ceil(1000 * Math.random())
-  console.log('Generated', randomId)
-
-  return compose(
-    connect(mapStateToProps),
-    reduxForm({ form: `contract-${randomId}` })
-  )(WrappedComponent)
+  return connect(mapStateToProps)(WrappedComponent)
 }
 
 export default loadContract
