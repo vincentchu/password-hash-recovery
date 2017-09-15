@@ -9,6 +9,7 @@ import type { BigNumber } from 'big-number'
 import PasswordHashRecovery from '../../../truffle/build/contracts/PasswordHashRecovery.json' // eslint-disable-line
 
 const mapStateToProps = (state: {
+  form: Object,
   session: SessionStore
 }) => ({ web3Present: state.session.web3Present })
 
@@ -64,6 +65,7 @@ const loadContract = (BaseComponent: Function | typeof React.Component) => {
       return (
         <BaseComponent
           {...this.props} bounty={this.state.bounty} deployedContract={this.state.deployedContract}
+          plaintextForm={this.state.plaintextForm}
         />
       )
     }

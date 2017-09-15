@@ -1,7 +1,10 @@
 // @flow
 import React from 'react'
-import { Panel } from 'react-bootstrap'
-import { Field, reduxForm } from 'redux-form'
+import { compose } from 'ramda'
+import { connect } from 'react-redux'
+import { Button, ButtonToolbar, Panel } from 'react-bootstrap'
+import { Field, reduxForm, startAsyncValidation, stopAsyncValidation } from 'redux-form'
+
 import classnames from 'classnames'
 import loadContract from './load-contract'
 
@@ -48,12 +51,28 @@ const ContractView = (props: {
   passwordSha1Hash: string,
   bounty: ?BigNumber,
   deployedContract: ?Object,
+  dispatch: Function,
 }) => {
-  const { panelStyle, title, contractAddress, passwordSha1Hash, bounty, deployedContract, handleSubmit } = props
+  const {panelStyle, title, contractAddress, passwordSha1Hash, bounty, deployedContract, handleSubmit, dispatch } = props
   console.log('>>>', props)
 
   const header = (<h3>{ title }</h3>)
   const onSubmit = (values) => console.log('VALS', values)
+
+  const onTest = () => {
+    if (deployedContract) {
+      dispatch(startAsyncValidation('contract'))
+      deployedContract.solve.call('foo', (err, result) => {
+        console.log('ERR', err)
+        console.log('RESULT', result)
+
+        const errors = result ? {} : { plaintext: 'did not match' }
+
+        dispatch(stopAsyncValidation('contract', errors))
+
+      })
+    }
+  }
 
   return (
     <div>
@@ -81,6 +100,15 @@ const ContractView = (props: {
               id="plaintext" name="plaintext" placeholder="Plaintext Password"
               component={InputField}
             />
+
+            <ButtonToolbar>
+              <Button onClick={onTest}>
+                Test
+              </Button>
+              <Button>
+                Submit
+              </Button>
+            </ButtonToolbar>
           </form>
         </div>
       </Panel>
@@ -88,4 +116,8 @@ const ContractView = (props: {
   )
 }
 
-export default loadContract(reduxForm({ form: 'contract' })(ContractView))
+export default compose(
+  loadContract,
+  connect(),
+  reduxForm({ form: 'contract' })
+)(ContractView)
