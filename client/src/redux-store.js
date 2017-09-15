@@ -1,9 +1,15 @@
 // @flow
-import { createStore, combineReducers } from 'redux'
+import { createStore, combineReducers, applyMiddleware } from 'redux'
 import { reducer as formReducer } from 'redux-form'
+import createLogger from 'redux-logger'
+import { reducer as sessionReducer } from './state/session'
 
-const reducer = combineReducers({ forms: formReducer })
+const logger = createLogger()
+const reducer = combineReducers({
+  forms: formReducer,
+  session: sessionReducer,
+})
 
-const store = createStore(reducer)
+const store = createStore(reducer, applyMiddleware(logger))
 
 export default store
