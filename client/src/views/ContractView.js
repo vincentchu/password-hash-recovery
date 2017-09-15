@@ -67,10 +67,14 @@ const ContractView = (props: {
   const onTest = () => {
     if (deployedContract) {
       dispatch(startAsyncValidation('contract'))
+      const startedAt = new Date()
       deployedContract.solve.call(plaintext, (err, result) => {
         const errors = result ? {} : { plaintext: 'Incorrect plaintext' }
 
-        dispatch(stopAsyncValidation('contract', errors))
+        const elapsed = (new Date()) - startedAt
+        const timeToWait = Math.max(0, 1000 - elapsed)
+
+        setTimeout(() => dispatch(stopAsyncValidation('contract', errors)), timeToWait)
       })
     }
   }
