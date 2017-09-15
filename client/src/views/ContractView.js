@@ -8,6 +8,7 @@ import { Field, reduxForm, startAsyncValidation, stopAsyncValidation } from 'red
 import classnames from 'classnames'
 import loadContract from './load-contract'
 
+import type { Contract } from '../state/contracts'
 import type { BigNumber } from 'big-number'
 
 const truncateAddr = (addr: string): string => {
@@ -45,15 +46,13 @@ const InputField = (props: {
 }
 
 const ContractView = (props: {
-  panelStyle: string,
-  title: string,
-  contractAddress: string,
-  passwordSha1Hash: string,
+  contract: Contract,
   bounty: ?BigNumber,
   deployedContract: ?Object,
   dispatch: Function,
 }) => {
-  const {panelStyle, title, contractAddress, passwordSha1Hash, bounty, deployedContract, handleSubmit, dispatch } = props
+  const {contract, bounty, deployedContract, handleSubmit, dispatch } = props
+  const { title, panelStyle, contractAddress, passwordSha1Hash } = contract
   console.log('>>>', props)
 
   const header = (<h3>{ title }</h3>)

@@ -35,9 +35,9 @@ const Home = (props: {
     </div>
 
     <div className="row">
-      { props.contracts.map((contractProps, i) => (
+      { props.contracts.map((contract, i) => (
         <div key={i} className="col-md-4">
-          <ContractView {...contractProps} />
+          <ContractView contract={contract} />
         </div>
       )) }
     </div>

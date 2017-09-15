@@ -2,6 +2,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
+import type { Contract } from '../state/contracts'
 import type { SessionStore } from '../state/session'
 import type { BigNumber } from 'big-number'
 
@@ -33,7 +34,7 @@ const loadContract = (BaseComponent: Function | typeof React.Component) => {
 
     componentWillReceiveProps(newProps) {
       if (!this.state.loaded && newProps.web3Present) {
-        this.loadContract(this.props.contractAddress)
+        this.loadContract(this.props.contract.contractAddress)
       }
     }
 
@@ -58,14 +59,13 @@ const loadContract = (BaseComponent: Function | typeof React.Component) => {
 
     props: {
       web3Present: bool,
-      contractAddress: string,
+      contract: Contract,
     }
 
     render() {
       return (
         <BaseComponent
           {...this.props} bounty={this.state.bounty} deployedContract={this.state.deployedContract}
-          plaintextForm={this.state.plaintextForm}
         />
       )
     }
