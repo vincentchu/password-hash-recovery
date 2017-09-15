@@ -49,6 +49,7 @@ const ContractView = (props: {
   bounty: ?BigNumber,
   deployedContract: ?Object,
   dispatch: Function,
+  handleSubmit: Function,
   error: bool,
   submitting: bool,
   pristine: bool,
@@ -57,13 +58,33 @@ const ContractView = (props: {
 }) => {
   const {
     contract, bounty, deployedContract, dispatch, plaintext,
-    handleSubmit, error, submitting, pristine, asyncValidating, ...propz
+    handleSubmit, error, submitting, pristine, asyncValidating,
   } = props
   const { title, panelStyle, contractAddress, passwordSha1Hash } = contract
-  console.log('laintext', plaintext)
-  console.log('XX', propz)
 
-  const onSubmit = (values) => console.log('VALS', values)
+  const onSubmit = ({ plaintext }) => {
+    console.log('VALS', plaintext)
+
+    if (deployedContract) {
+      const promise = new Promise((resolve, reject) => {
+        deployedContract.solve(plaintext, (err, tx) => {
+          console.log('ERR', err)
+          console.log('TX', tx)
+
+          if (err) {
+            reject(err)
+          } else {
+            resolve(tx)
+          }
+        })
+      })
+
+      return promise
+    }
+
+    return Promise.resolve(true)
+  }
+
   const onTest = () => {
     if (deployedContract) {
       dispatch(startAsyncValidation('contract'))
@@ -78,6 +99,8 @@ const ContractView = (props: {
       })
     }
   }
+
+  const disableForm = !deployedContract || (submitting || pristine || asyncValidating)
 
   const header = (<h3>{ title }</h3>)
 
@@ -110,15 +133,15 @@ const ContractView = (props: {
 
             <div className="button-bar">
               <ButtonToolbar>
-                <Button onClick={onTest} disabled={submitting || pristine || asyncValidating}>
+                <Button onClick={onTest} disabled={disableForm}>
                   Test
                 </Button>
-                <Button disabled={submitting || pristine || error || asyncValidating}>
+                <Button bsStyle="primary" type="submit" disabled={disableForm || error}>
                   Submit
                 </Button>
               </ButtonToolbar>
               <div className="status">
-                <div className={classnames('spinner', asyncValidating && 'show')}>
+                <div className={classnames('spinner', (asyncValidating || submitting) && 'show')}>
                   <Glyphicon glyph="refresh" />
                 </div>
               </div>
