@@ -22,6 +22,7 @@ contract PasswordHashRecovery is SHA1 {
     if (sha3(hashedPassword) == sha3(hash)) {
       msg.sender.transfer(this.balance);
       PasswordCracked(msg.sender, bounty, password, hashedPassword);
+      bounty = 0;
 
       return true;
     }
