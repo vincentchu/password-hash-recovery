@@ -3,15 +3,7 @@ import React from 'react'
 
 import type { Contract } from '../state/contracts'
 import type { BigNumber } from 'big-number'
-
-const truncateAddr = (addr: string): string => {
-  const firstPart = addr.slice(0, 8)
-  const lastPart = addr.slice(-7, -1)
-
-  return `${firstPart}...${lastPart}`
-}
-
-const linkForAddr = (addr: string) => `https://etherscan.io/address/${addr}`
+import { truncateAddr, linkForAddr } from './helpers'
 
 const ContractMetadata = (props: {
   contract: Contract,

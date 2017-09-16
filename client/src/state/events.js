@@ -3,7 +3,7 @@ import { mergeDeepRight } from 'ramda'
 
 type EventType = 'PasswordCracked' | 'AttemptFailed'
 
-type Event = {
+export type Event = {
   transactionHash: string,
   args: Object,
 }

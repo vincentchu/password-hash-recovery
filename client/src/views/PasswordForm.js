@@ -86,7 +86,7 @@ const PasswordForm = (props: {
   const disableForm = !deployedContract || (submitting || pristine || asyncValidating)
 
   return (
-    <div>
+    <div className="password-form">
       <form onSubmit={handleSubmit(onSubmit)}>
         <Field
           id="plaintext" name="plaintext" placeholder="Plaintext Password"

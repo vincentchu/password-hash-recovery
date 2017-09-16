@@ -3,6 +3,7 @@ import React from 'react'
 import { Panel } from 'react-bootstrap'
 import loadContract from './load-contract'
 import ContractMetadata from './ContractMetadata'
+import Events from './Events'
 import PasswordForm from './PasswordForm'
 
 import type { Contract } from '../state/contracts'
@@ -26,6 +27,8 @@ const ContractView = (props: {
         <ContractMetadata bounty={bounty} contract={contract} />
 
         <PasswordForm coinbase={coinbase} deployedContract={deployedContract} />
+
+        <Events contract={contract} />
       </Panel>
     </div>
   )
