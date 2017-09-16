@@ -1,4 +1,5 @@
 // @flow
+import { mergeDeepRight } from 'ramda'
 
 type EventType = 'PasswordCracked' | 'AttemptFailed'
 
@@ -29,10 +30,7 @@ export const reducer = (
       const { address, events, eventType } = action
 
       if (address && events && eventType) {
-        return {
-          ...state,
-          [address]: { [eventType]: events },
-        }
+        return mergeDeepRight(state, { [address]: { [eventType]: events } })
       }
 
       return state
