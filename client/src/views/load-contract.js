@@ -1,6 +1,7 @@
 // @flow
 import React from 'react'
 import { connect } from 'react-redux'
+import { updateEvents } from '../state/events'
 
 import type { Contract } from '../state/contracts'
 import type { SessionStore } from '../state/session'
@@ -9,13 +10,14 @@ import type { BigNumber } from 'big-number'
 // $FlowFixMe - Flow can't see into the truffle dir
 import PasswordHashRecovery from '../../../truffle/build/contracts/PasswordHashRecovery.json' // eslint-disable-line
 
+const TimeFrame = { fromBlock: 0, toBlock: 'latest' }
+
 const mapStateToProps = (state: {
   form: Object,
   session: SessionStore
 }) => ({ web3Present: state.session.web3Present })
 
 const loadContract = (BaseComponent: Function | typeof React.Component) => {
-
   class WrappedComponent extends React.Component {
     constructor(props: Object) {
       super(props)
@@ -45,11 +47,21 @@ const loadContract = (BaseComponent: Function | typeof React.Component) => {
         const deployedContract = contract.at(contractAddress)
         window.deployedContract = deployedContract
 
-        deployedContract.bounty((err, bounty) => this.setState({
-          loaded: true,
-          deployedContract,
-          bounty,
-        }))
+        deployedContract.bounty((err, bounty) => {
+          deployedContract.PasswordCracked({}, TimeFrame).get((err, crackedEvts) => {
+            deployedContract.AttemptFailed({}, TimeFrame).get((err, failureEvts) => {
+
+              this.props.dispatch(updateEvents(contractAddress, 'PasswordCracked', crackedEvts))
+              this.props.dispatch(updateEvents(contractAddress, 'AttemptFailed', failureEvts))
+
+              this.setState({
+                loaded: true,
+                deployedContract,
+                bounty,
+              })
+            })
+          })
+        })
 
       } catch (err) {
         console.log('ERR', err)
@@ -60,6 +72,7 @@ const loadContract = (BaseComponent: Function | typeof React.Component) => {
     props: {
       web3Present: bool,
       contract: Contract,
+      dispatch: Function,
     }
 
     render() {

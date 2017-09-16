@@ -7,6 +7,7 @@ import { Field, formValues, reduxForm, startAsyncValidation, stopAsyncValidation
 import classnames from 'classnames'
 import loadContract from './load-contract'
 
+import type { SessionStore } from '../state/session'
 import type { Contract } from '../state/contracts'
 import type { BigNumber } from 'big-number'
 
@@ -45,6 +46,7 @@ const InputField = (props: {
 }
 
 const ContractView = (props: {
+  coinbase: ?string,
   contract: Contract,
   bounty: ?BigNumber,
   deployedContract: ?Object,
@@ -57,7 +59,7 @@ const ContractView = (props: {
   plaintext: ?string,
 }) => {
   const {
-    contract, bounty, deployedContract, dispatch, plaintext,
+    coinbase, contract, bounty, deployedContract, dispatch, plaintext,
     handleSubmit, error, submitting, pristine, asyncValidating,
   } = props
   const { title, panelStyle, contractAddress, passwordSha1Hash } = contract
@@ -89,7 +91,7 @@ const ContractView = (props: {
     if (deployedContract) {
       dispatch(startAsyncValidation('contract'))
       const startedAt = new Date()
-      deployedContract.solve.call(plaintext, (err, result) => {
+      deployedContract.solve.call(plaintext, { from: coinbase }, (err, result) => {
         const errors = result ? {} : { plaintext: 'Incorrect plaintext' }
 
         const elapsed = (new Date()) - startedAt
@@ -154,9 +156,13 @@ const ContractView = (props: {
   )
 }
 
+const mapStateToProps = (state: {
+  session: SessionStore
+}) => ({ coinbase: state.session.coinbase })
+
 export default compose(
+  connect(mapStateToProps),
   loadContract,
-  connect(),
   reduxForm({ form: 'contract' }),
   formValues('plaintext')
 )(ContractView)
