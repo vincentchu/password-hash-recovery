@@ -6,19 +6,11 @@ import { Button, ButtonToolbar, Glyphicon, Panel } from 'react-bootstrap'
 import { Field, formValues, reduxForm, startAsyncValidation, stopAsyncValidation } from 'redux-form'
 import classnames from 'classnames'
 import loadContract from './load-contract'
+import ContractMetadata from './ContractMetadata'
 
 import type { SessionStore } from '../state/session'
 import type { Contract } from '../state/contracts'
 import type { BigNumber } from 'big-number'
-
-const truncateAddr = (addr: string): string => {
-  const firstPart = addr.slice(0, 8)
-  const lastPart = addr.slice(-7, -1)
-
-  return `${firstPart}...${lastPart}`
-}
-
-const linkForAddr = (addr: string) => `https://etherscan.io/address/${addr}`
 
 const InputField = (props: {
   input: Object,
@@ -62,7 +54,7 @@ const ContractView = (props: {
     coinbase, contract, bounty, deployedContract, dispatch, plaintext,
     handleSubmit, error, submitting, pristine, asyncValidating,
   } = props
-  const { title, panelStyle, contractAddress, passwordSha1Hash } = contract
+  const { title, panelStyle } = contract
 
   const onSubmit = ({ plaintext }) => {
     console.log('VALS', plaintext)
@@ -109,22 +101,7 @@ const ContractView = (props: {
   return (
     <div>
       <Panel bsStyle={panelStyle} header={header}>
-        <div>
-          <dl className="dl-horizontal">
-            <dt>Contract Address</dt>
-            <dd>
-              <a href={linkForAddr(contractAddress)}>
-                { truncateAddr(contractAddress) }
-              </a>
-            </dd>
-
-            <dt>Password SHA1 Hash</dt>
-            <dd>{ truncateAddr(passwordSha1Hash) }</dd>
-
-            <dt>Bounty</dt>
-            <dd>{ bounty && bounty.valueOf() }</dd>
-          </dl>
-        </div>
+        <ContractMetadata bounty={bounty} contract={contract} />
 
         <div>
           <form onSubmit={handleSubmit(onSubmit)}>
