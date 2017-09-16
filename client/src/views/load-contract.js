@@ -15,7 +15,10 @@ const TimeFrame = { fromBlock: 0, toBlock: 'latest' }
 const mapStateToProps = (state: {
   form: Object,
   session: SessionStore
-}) => ({ web3Present: state.session.web3Present })
+}) => ({
+  web3Present: state.session.web3Present,
+  coinbase: state.session.coinbase,
+})
 
 const loadContract = (BaseComponent: Function | typeof React.Component) => {
   class WrappedComponent extends React.Component {
@@ -71,6 +74,7 @@ const loadContract = (BaseComponent: Function | typeof React.Component) => {
 
     props: {
       web3Present: bool,
+      coinbase: ?string,
       contract: Contract,
       dispatch: Function,
     }

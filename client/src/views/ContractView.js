@@ -1,13 +1,10 @@
 // @flow
 import React from 'react'
-import { compose } from 'ramda'
-import { connect } from 'react-redux'
 import { Panel } from 'react-bootstrap'
 import loadContract from './load-contract'
 import ContractMetadata from './ContractMetadata'
 import PasswordForm from './PasswordForm'
 
-import type { SessionStore } from '../state/session'
 import type { Contract } from '../state/contracts'
 import type { BigNumber } from 'big-number'
 
@@ -34,11 +31,4 @@ const ContractView = (props: {
   )
 }
 
-const mapStateToProps = (state: {
-  session: SessionStore
-}) => ({ coinbase: state.session.coinbase })
-
-export default compose(
-  connect(mapStateToProps),
-  loadContract,
-)(ContractView)
+export default loadContract(ContractView)
