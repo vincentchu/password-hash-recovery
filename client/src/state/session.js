@@ -19,7 +19,8 @@ export const reducer = (
   switch (action.type) {
     case CHECK_WEB3: {
       const web3Present = typeof window.web3 !== 'undefined'
-      const coinbase: ?string = web3Present && window.web3.eth.coinbase
+      // $FlowFixMe - Can't instrospect type
+      const coinbase: string = web3Present && window.web3.eth.coinbase
 
       return {
         ...state,

@@ -46,14 +46,9 @@ const PasswordForm = (props: {
   } = props
 
   const onSubmit = ({ plaintext }) => {
-    console.log('VALS', plaintext)
-
     if (deployedContract) {
       const promise = new Promise((resolve, reject) => {
         deployedContract.solve(plaintext, (err, tx) => {
-          console.log('ERR', err)
-          console.log('TX', tx)
-
           if (err) {
             reject(err)
           } else {

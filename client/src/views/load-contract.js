@@ -25,6 +25,20 @@ const loadContractEvents = (contract: Object, dispatch: Function): Promise<bool>
   })
 }
 
+const pollForEvents = (contract: Object, dispatch: Function) => {
+  let nTimes = 0
+  const poller = () => {
+    loadContractEvents(contract, dispatch)
+    nTimes += 1
+
+    if (nTimes < 1000) {
+      setTimeout(poller, 5000)
+    }
+  }
+
+  poller()
+}
+
 const mapStateToProps = (state: {
   form: Object,
   session: SessionStore
@@ -73,8 +87,10 @@ const loadContract = (BaseComponent: Function | typeof React.Component) => {
             bounty,
           })
         })
+
+        pollForEvents(deployedContract, this.props.dispatch)
       } catch (err) {
-        console.log('ERR', err)
+        console.log('Error on contract instantiation:', err)  // eslint-disable-line no-console
       }
     }
 
