@@ -11,6 +11,20 @@ import type { BigNumber } from 'big-number'
 // $FlowFixMe - Flow can't see into the truffle dir
 import PasswordHashRecovery from '../../../truffle/build/contracts/PasswordHashRecovery.json' // eslint-disable-line
 
+const loadContractEvents = (contract: Object, dispatch: Function): Promise<bool> => {
+  const contractAddress = contract.address
+
+  return Promise.all([
+    passwordCrackedEventsFor(contract),
+    attemptFailedEventsFor(contract),
+  ]).then(([ crackedEvts, failedEvts ]) => {
+    dispatch(updateEvents(contractAddress, 'PasswordCracked', crackedEvts))
+    dispatch(updateEvents(contractAddress, 'AttemptFailed', failedEvts))
+
+    return true
+  })
+}
+
 const mapStateToProps = (state: {
   form: Object,
   session: SessionStore
@@ -51,17 +65,13 @@ const loadContract = (BaseComponent: Function | typeof React.Component) => {
 
         Promise.all([
           bountyFor(deployedContract),
-          passwordCrackedEventsFor(deployedContract),
-          attemptFailedEventsFor(deployedContract),
-        ]).then(([ bounty, crackedEvts, failedEvts ]) => {
+          loadContractEvents(deployedContract, this.props.dispatch),
+        ]).then(([ bounty ]) => {
           this.setState({
             loaded: true,
             deployedContract,
             bounty,
           })
-
-          this.props.dispatch(updateEvents(contractAddress, 'PasswordCracked', crackedEvts))
-          this.props.dispatch(updateEvents(contractAddress, 'AttemptFailed', failedEvts))
         })
       } catch (err) {
         console.log('ERR', err)
