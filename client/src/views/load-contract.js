@@ -1,6 +1,7 @@
 // @flow
 import React from 'react'
 import { connect } from 'react-redux'
+import { bountyFor, passwordCrackedEventsFor, attemptFailedEventsFor } from './helpers'
 import { updateEvents } from '../state/events'
 
 import type { Contract } from '../state/contracts'
@@ -9,8 +10,6 @@ import type { BigNumber } from 'big-number'
 
 // $FlowFixMe - Flow can't see into the truffle dir
 import PasswordHashRecovery from '../../../truffle/build/contracts/PasswordHashRecovery.json' // eslint-disable-line
-
-const TimeFrame = { fromBlock: 0, toBlock: 'latest' }
 
 const mapStateToProps = (state: {
   form: Object,
@@ -50,27 +49,24 @@ const loadContract = (BaseComponent: Function | typeof React.Component) => {
         const deployedContract = contract.at(contractAddress)
         window.deployedContract = deployedContract
 
-        deployedContract.bounty((err, bounty) => {
-          deployedContract.PasswordCracked({}, TimeFrame).get((err, crackedEvts) => {
-            deployedContract.AttemptFailed({}, TimeFrame).get((err, failureEvts) => {
-
-              this.props.dispatch(updateEvents(contractAddress, 'PasswordCracked', crackedEvts))
-              this.props.dispatch(updateEvents(contractAddress, 'AttemptFailed', failureEvts))
-
-              this.setState({
-                loaded: true,
-                deployedContract,
-                bounty,
-              })
-            })
+        Promise.all([
+          bountyFor(deployedContract),
+          passwordCrackedEventsFor(deployedContract),
+          attemptFailedEventsFor(deployedContract),
+        ]).then(([ bounty, crackedEvts, failedEvts ]) => {
+          this.setState({
+            loaded: true,
+            deployedContract,
+            bounty,
           })
-        })
 
+          this.props.dispatch(updateEvents(contractAddress, 'PasswordCracked', crackedEvts))
+          this.props.dispatch(updateEvents(contractAddress, 'AttemptFailed', failedEvts))
+        })
       } catch (err) {
         console.log('ERR', err)
       }
     }
-
 
     props: {
       web3Present: bool,
