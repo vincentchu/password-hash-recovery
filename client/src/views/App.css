@@ -16,6 +16,10 @@
   flex-direction: row;
 }
 
+.events-table:first-child {
+  margin-bottom: 20px;
+} 
+
 @keyframes spin {
   100% {
     transform: rotate(360deg); transform:rotate(360deg);
