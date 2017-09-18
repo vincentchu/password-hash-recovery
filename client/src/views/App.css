@@ -29,6 +29,8 @@
 .status {
   margin-left: 3px;
   padding: 7px;
+  display: flex;
+  flex-direction: row;
 }
 
 .spinner {

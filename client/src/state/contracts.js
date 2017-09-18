@@ -15,7 +15,7 @@ export type ContractStore = {
   [key: Network]: Contract[]
 }
 
-const mergeValidity = (contracts: Contract[], address: string, validity: bool): Contract[] => {
+const mergeValidity = (contracts: Contract[], address: string, validity: ?bool): Contract[] => {
   const updatedContracts = []
 
   contracts.forEach((contract) => {
@@ -70,7 +70,7 @@ export const reducer = (
     case UPDATE_VALIDITY: {
       const { network, address, validity } = action
 
-      if (network && address && validity) {
+      if (network && address) {
         const updatedContracts = mergeValidity(state[network] || [], address, validity)
 
         return mergeDeepRight(state, { [network]: updatedContracts })

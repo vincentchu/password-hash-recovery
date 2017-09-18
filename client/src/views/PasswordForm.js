@@ -15,22 +15,25 @@ const InputField = (props: {
   name: string,
   placeholder: string,
   meta: { error: ?string },
+  isValid: bool,
 }) => {
   const {
     input,
     name,
     placeholder,
+    isValid,
     meta: { error },
   } = props
 
+  const succ = isValid && 'Correct plaintext'
 
   return (
-    <div className={classnames('form-group', error && 'has-error')}>
+    <div className={classnames('form-group', error && 'has-error', isValid && 'has-success')}>
       <label className="control-label" htmlFor={name}>
         { placeholder }
       </label>
       <input className="form-control" placeholder={placeholder} {...input} />
-      <span className="help-block">{ error }</span>
+      <span className="help-block">{ error }{ succ }</span>
     </div>
   )
 }
@@ -63,8 +66,10 @@ const PasswordForm = (props: {
         const elapsed = (new Date()) - startedAt
         const timeToWait = Math.max(0, 1000 - elapsed)
 
-        dispatch(updateValidity('development', deployedContract.address, result))
-        setTimeout(() => dispatch(stopAsyncValidation('contract', errors)), timeToWait)
+        setTimeout(() => {
+          dispatch(stopAsyncValidation('contract', errors))
+          dispatch(updateValidity('development', deployedContract.address, result))
+        }, timeToWait)
       })
     }
   }
@@ -75,7 +80,7 @@ const PasswordForm = (props: {
     <div className="password-form">
       <form onSubmit={handleSubmit(onSubmit)}>
         <Field
-          id="plaintext" name="plaintext" placeholder="Plaintext Password"
+          id="plaintext" name="plaintext" placeholder="Plaintext Password" isValid={validTest}
           component={InputField}
         />
 
@@ -92,11 +97,6 @@ const PasswordForm = (props: {
             <div className={classnames('spinner', (asyncValidating || submitting) && 'show')}>
               <Glyphicon glyph="refresh" />
             </div>
-
-            <div>
-              { validTest && 'Correct plaintext password'}
-            </div>
-
           </div>
         </div>
       </form>
