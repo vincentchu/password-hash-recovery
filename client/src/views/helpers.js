@@ -84,10 +84,7 @@ export const displayDenomination = (value: BigNumber): string => {
       break
   }
 
-  console.log(value)
-  console.log(divisor)
   const mantissa = value.dividedBy(divisor).toFixed(3)
-  // const mantissa = 1
 
   return `${mantissa} ${denom}`
 }

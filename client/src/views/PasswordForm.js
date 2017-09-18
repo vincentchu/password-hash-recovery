@@ -1,16 +1,20 @@
 // @flow
 import React from 'react'
 import { compose } from 'ramda'
+import { connect } from 'react-redux'
 import { Button, ButtonToolbar, Glyphicon } from 'react-bootstrap'
 import { Field, formValues, reduxForm, startAsyncValidation, stopAsyncValidation } from 'redux-form'
 import classnames from 'classnames'
 import { solve } from './helpers'
+import { updateValidity } from '../state/contracts'
+
+import type { ContractStore } from '../state/contracts'
 
 const InputField = (props: {
   input: Object,
   name: string,
   placeholder: string,
-  meta: { error: ?string }
+  meta: { error: ?string },
 }) => {
   const {
     input,
@@ -18,6 +22,7 @@ const InputField = (props: {
     placeholder,
     meta: { error },
   } = props
+
 
   return (
     <div className={classnames('form-group', error && 'has-error')}>
@@ -39,13 +44,13 @@ const PasswordForm = (props: {
   submitting: bool,
   pristine: bool,
   asyncValidating: bool,
+  validTest: bool,
   plaintext: ?string,
 }) => {
   const {
-    coinbase, deployedContract, dispatch, plaintext, handleSubmit,
+    coinbase, deployedContract, dispatch, validTest, plaintext, handleSubmit,
     error, submitting, pristine, asyncValidating,
   } = props
-
   const onSubmit = ({ plaintext }) => solve(deployedContract, plaintext)
 
   const onTest = () => {
@@ -58,6 +63,7 @@ const PasswordForm = (props: {
         const elapsed = (new Date()) - startedAt
         const timeToWait = Math.max(0, 1000 - elapsed)
 
+        dispatch(updateValidity('development', deployedContract.address, result))
         setTimeout(() => dispatch(stopAsyncValidation('contract', errors)), timeToWait)
       })
     }
@@ -86,15 +92,34 @@ const PasswordForm = (props: {
             <div className={classnames('spinner', (asyncValidating || submitting) && 'show')}>
               <Glyphicon glyph="refresh" />
             </div>
-          </div>
 
+            <div>
+              { validTest && 'Correct plaintext password'}
+            </div>
+
+          </div>
         </div>
       </form>
     </div>
   )
 }
 
+const mapStateToProps = (
+  state: { contracts: ContractStore },
+  props: { deployedContract: ?Object }
+) => {
+  const addr = props.deployedContract && props.deployedContract.address
+  const contract = state.contracts.development.filter(
+    (contract) => contract.contractAddress === addr
+  )[0]
+
+  const validTest = (contract && contract.validTest) || false
+
+  return ({ validTest })
+}
+
 export default compose(
+  connect(mapStateToProps),
   reduxForm({ form: 'contract' }),
   formValues('plaintext')
 )(PasswordForm)
