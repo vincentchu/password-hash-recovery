@@ -1,8 +1,8 @@
 // @flow
 import React from 'react'
+import BigNumber from 'bignumber.js'
 
 import type { Event } from '../state/events'
-import type { BigNumber } from 'big-number'
 
 export const truncateAddr = (addr: string): string => {
   const firstPart = addr.slice(0, 8)
@@ -39,6 +39,57 @@ const promisify = (callback: Function) => {
   })
 
   return promise
+}
+
+export const displayDenomination = (value: BigNumber): string => {
+  let denom = ''
+  let divisor
+
+  const expo = value.e
+  switch (true) {
+    case (expo >= 18):
+      window.BigNumber = BigNumber
+      denom = 'Ether'
+      divisor = new BigNumber('1e+18')
+      break
+
+    case (expo < 18 && expo >= 15):
+      denom = 'Finney'
+      divisor = new BigNumber('1e+15')
+      break
+
+    case (expo < 15 && expo >= 12):
+      denom = 'Szabo'
+      divisor = new BigNumber('1e+12')
+      break
+
+    case (expo < 12 && expo >= 9):
+      denom = 'Gwei'
+      divisor = new BigNumber('1e+9')
+      break
+
+    case (expo < 9 && expo >= 6):
+      denom = 'Mwei'
+      divisor = new BigNumber('1e+6')
+      break
+
+    case (expo < 6 && expo >= 3):
+      denom = 'KWei'
+      divisor = new BigNumber('1e+3')
+      break
+
+    default:
+      denom = 'Wei'
+      divisor = new BigNumber('1e+0')
+      break
+  }
+
+  console.log(value)
+  console.log(divisor)
+  const mantissa = value.dividedBy(divisor).toFixed(3)
+  // const mantissa = 1
+
+  return `${mantissa} ${denom}`
 }
 
 export const bountyFor = (contract: Object): Promise<BigNumber> =>

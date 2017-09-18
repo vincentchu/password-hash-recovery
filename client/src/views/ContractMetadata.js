@@ -1,10 +1,10 @@
 // @flow
 import React from 'react'
 import CopyToClipboardButton from './CopyToClipboardButton'
+import { displayDenomination, truncateAddr, linkForAddr } from './helpers'
 
 import type { Contract } from '../state/contracts'
-import type { BigNumber } from 'big-number'
-import { truncateAddr, linkForAddr } from './helpers'
+import type { BigNumber } from 'bignumber.js'
 
 const ContractMetadata = (props: {
   contract: Contract,
@@ -20,7 +20,7 @@ const ContractMetadata = (props: {
     if (bounty.valueOf() === '0') {
       displayBounty = '0 (Solved)'
     } else {
-      displayBounty = bounty.valueOf()
+      displayBounty = displayDenomination(bounty)
     }
   }
 

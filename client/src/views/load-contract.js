@@ -6,7 +6,7 @@ import { updateEvents } from '../state/events'
 
 import type { Contract } from '../state/contracts'
 import type { SessionStore } from '../state/session'
-import type { BigNumber } from 'big-number'
+import type { BigNumber } from 'bignumber.js'
 
 // $FlowFixMe - Flow can't see into the truffle dir
 import PasswordHashRecovery from '../../../truffle/build/contracts/PasswordHashRecovery.json' // eslint-disable-line

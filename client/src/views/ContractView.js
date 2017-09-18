@@ -7,7 +7,7 @@ import Events from './Events'
 import PasswordForm from './PasswordForm'
 
 import type { Contract } from '../state/contracts'
-import type { BigNumber } from 'big-number'
+import type { BigNumber } from 'bignumber.js'
 
 const ContractView = (props: {
   coinbase: ?string,
