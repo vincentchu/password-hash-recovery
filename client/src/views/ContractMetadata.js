@@ -1,5 +1,6 @@
 // @flow
 import React from 'react'
+import CopyToClipboardButton from './CopyToClipboardButton'
 
 import type { Contract } from '../state/contracts'
 import type { BigNumber } from 'big-number'
@@ -33,11 +34,16 @@ const ContractMetadata = (props: {
           </a>
         </dd>
 
-        <dt>Password SHA1 Hash</dt>
-        <dd>{ truncateAddr(passwordSha1Hash) }</dd>
-
         <dt>Current Bounty</dt>
         <dd>{ displayBounty }</dd>
+
+        <dt>Password SHA1 Hash</dt>
+        <dd>
+          <div className="password-hash">
+            { passwordSha1Hash }
+          </div>
+          <CopyToClipboardButton text={passwordSha1Hash} />
+        </dd>
       </dl>
     </div>
   )

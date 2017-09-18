@@ -2,16 +2,19 @@
 import React from 'react'
 import { Table } from 'react-bootstrap'
 import { connect } from 'react-redux'
+import { reverse } from 'ramda'
 import { HashLink } from './helpers'
 
 import type { Event, EventsStore } from '../state/events'
+import type { SessionStore } from '../state/session'
 import type { Contract } from '../state/contracts'
 
 const EventsTable = (props: {
   title: string,
   events: Event[],
+  coinbase: ?string,
 }) => {
-  const { title, events } = props
+  const { coinbase, title, events } = props
 
   return (
     <div className="row">
@@ -25,9 +28,12 @@ const EventsTable = (props: {
             </tr>
           </thead>
           <tbody>
-            { events.map((evt) => (
+            { reverse(events).map((evt) => (
               <tr key={evt.transactionHash}>
-                <td><HashLink addr={evt.transactionHash} truncate /></td>
+                <td>
+                  <HashLink addr={evt.transactionHash} truncate />
+                  { coinbase === (evt.args.source || evt.args.crackedBy || -1) && ' (you)' }
+                </td>
                 <td>{evt.args.password}</td>
               </tr>
             )) }
@@ -39,29 +45,35 @@ const EventsTable = (props: {
 }
 
 const Events = (props: {
+  coinbase: ?string,
   passwordCrackedEvents: Event[],
   attemptFailedEvents: Event[],
 }) => {
-  const { passwordCrackedEvents, attemptFailedEvents } = props
+  const { coinbase, passwordCrackedEvents, attemptFailedEvents } = props
   return (
     <div>
-      <EventsTable title="Successful Cracks" events={passwordCrackedEvents} />
-      <EventsTable title="Failed Attempts" events={attemptFailedEvents} />
+      <EventsTable title="Successful Cracks" events={passwordCrackedEvents} coinbase={coinbase} />
+      <EventsTable title="Failed Attempts" events={attemptFailedEvents} coinbase={coinbase} />
     </div>
   )
 }
 
 const mapStateToProps = (
-  state: { events: EventsStore },
+  state: {
+    session: SessionStore,
+    events: EventsStore,
+  },
   props: { contract: Contract }
 ) => {
   const address = props.contract.contractAddress
+  const coinbase = state.session.coinbase
   const events = state.events[address] || {}
 
   const passwordCrackedEvents = events.PasswordCracked || []
   const attemptFailedEvents = events.AttemptFailed || []
 
   return {
+    coinbase,
     passwordCrackedEvents,
     attemptFailedEvents,
   }
