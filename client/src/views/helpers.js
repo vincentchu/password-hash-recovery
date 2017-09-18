@@ -95,6 +95,17 @@ export const displayDenomination = (value: BigNumber): string => {
 export const bountyFor = (contract: Object): Promise<BigNumber> =>
   promisify(contract.bounty)
 
+export const solve = (contract: ?Object, plaintext: string): Promise<any> => {
+  if (contract) {
+    // $FlowFixMe - Flow being stupid
+    const cb = (fn) => contract.solve(plaintext, fn)
+
+    return promisify(cb)
+  }
+
+  return Promise.resolve(true)
+}
+
 const TimeFrame = { fromBlock: 0, toBlock: 'latest' }
 
 export const passwordCrackedEventsFor = (contract: Object): Promise<Event[]> => {

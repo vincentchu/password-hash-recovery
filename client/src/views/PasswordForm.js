@@ -4,6 +4,7 @@ import { compose } from 'ramda'
 import { Button, ButtonToolbar, Glyphicon } from 'react-bootstrap'
 import { Field, formValues, reduxForm, startAsyncValidation, stopAsyncValidation } from 'redux-form'
 import classnames from 'classnames'
+import { solve } from './helpers'
 
 const InputField = (props: {
   input: Object,
@@ -45,23 +46,7 @@ const PasswordForm = (props: {
     error, submitting, pristine, asyncValidating,
   } = props
 
-  const onSubmit = ({ plaintext }) => {
-    if (deployedContract) {
-      const promise = new Promise((resolve, reject) => {
-        deployedContract.solve(plaintext, (err, tx) => {
-          if (err) {
-            reject(err)
-          } else {
-            resolve(tx)
-          }
-        })
-      })
-
-      return promise
-    }
-
-    return Promise.resolve(true)
-  }
+  const onSubmit = ({ plaintext }) => solve(deployedContract, plaintext)
 
   const onTest = () => {
     if (deployedContract) {
