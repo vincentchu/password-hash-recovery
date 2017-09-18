@@ -88,7 +88,7 @@ const loadContract = (BaseComponent: Function | typeof React.Component) => {
           })
         })
 
-        // pollForEvents(deployedContract, this.props.dispatch)
+        pollForEvents(deployedContract, this.props.dispatch)
       } catch (err) {
         console.log('Error on contract instantiation:', err)  // eslint-disable-line no-console
       }
