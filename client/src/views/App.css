@@ -1,0 +1,45 @@
+.password-hash {
+  word-wrap: break-word;
+  max-width: 85%;
+}
+
+.password-form {
+  margin-bottom: 20px;
+}
+
+.header-warning {
+  margin: 10px 30px;
+}
+
+.button-bar {
+  display: flex;
+  flex-direction: row;
+}
+
+.events-table:first-child {
+  margin-bottom: 20px;
+} 
+
+@keyframes spin {
+  100% {
+    transform: rotate(360deg); transform:rotate(360deg);
+  }
+}
+
+.status {
+  margin-left: 3px;
+  padding: 7px;
+  display: flex;
+  flex-direction: row;
+}
+
+.spinner {
+  opacity: 0;
+  animation: spin 2s linear infinite;
+  transition: opacity 500ms ease;
+}
+
+.spinner.show {
+  opacity: 1;
+  transition: opacity 500ms ease;
+}
