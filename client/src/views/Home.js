@@ -3,9 +3,11 @@ import React from 'react'
 import { connect } from 'react-redux'
 import ContractView from './ContractView'
 
+import type { NetworkType, SessionStore } from '../state/session'
 import type { Contract, ContractStore } from '../state/contracts'
 
 const Home = (props: {
+  network: NetworkType,
   contracts: Contract[],
 }) => (
   <div>
@@ -45,11 +47,20 @@ const Home = (props: {
 )
 
 const mapStateToProps = (state: {
+  session: SessionStore,
   contracts: ContractStore,
 }) => {
-  const contracts = state.contracts.development
+  const {
+    session: { network },
+    contracts,
+  } = state
 
-  return { contracts }
+  const currContracts = contracts[network] || contracts.rinkeby
+
+  return {
+    network,
+    contracts: currContracts,
+  }
 }
 
 export default connect(mapStateToProps)(Home)

@@ -1,17 +1,18 @@
 // @flow
+import { getNetwork } from '../views/helpers'
 
 export type NetworkType = 'development' | 'rinkeby' | 'unknown'
 
 export type SessionStore = {
   web3Present: bool,
   coinbase: ?string,
-  network: ?NetworkType
+  network: NetworkType
 }
 
 const InitialState = {
   web3Present: false,
+  network: 'unknown',
   coinbase: undefined,
-  network: undefined,
 }
 
 const CHECK_WEB3 = 'session/CHECK_WEB3'
@@ -24,12 +25,14 @@ export const reducer = (
   switch (action.type) {
     case CHECK_WEB3: {
       const web3Present = typeof window.web3 !== 'undefined'
+      const network = web3Present && getNetwork() || 'unknown'
       // $FlowFixMe - Can't instrospect type
       const coinbase: string = web3Present && window.web3.eth.coinbase
 
       return {
         ...state,
         web3Present,
+        network,
         coinbase,
       }
     }

@@ -120,21 +120,20 @@ export const attemptFailedEventsFor = (contract: Object): Promise<Event[]> => {
   return promisify(cb)
 }
 
-export const getNetwork = (): Promise<NetworkType> => {
+export const getNetwork = (): NetworkType => {
   if (typeof window.web3 !== 'undefined') {
-    return promisify(window.web3.version.getNetwork).then((networkId) => {
-      switch (networkId) {
-        case '1505855750115':
-          return 'development'
+    const networkId = window.web3.version.network
+    switch (networkId) {
+      case '1505855750115':
+        return 'development'
 
-        case '4':
-          return 'rinkeby'
+      case '4':
+        return 'rinkeby'
 
-        default:
-          return 'unknown'
-      }
-    })
+      default:
+        return 'unknown'
+    }
   }
 
-  return Promise.resolve('unknown')
+  return 'unknown'
 }
