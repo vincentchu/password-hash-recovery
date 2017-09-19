@@ -35,7 +35,7 @@ const initState = {
       title: 'Easy Difficulty',
       panelStyle: 'success',
       contractAddress: '0x9ad463357ddd5fea6b0150a9948a4fc447c07346',
-      passwordSha1Hash: '0xcbfdac6008f9cab4083784cbd1874f76618d2a97',
+      passwordSha1Hash: 'f3bbbd66a63d4bf1747940578ec3d0103530e21d',
       validTest: false,
     },
     {

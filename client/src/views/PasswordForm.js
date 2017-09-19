@@ -43,6 +43,7 @@ const PasswordForm = (props: {
   deployedContract: ?Object,
   dispatch: Function,
   handleSubmit: Function,
+  reset: Function,
   error: bool,
   submitting: bool,
   pristine: bool,
@@ -51,10 +52,10 @@ const PasswordForm = (props: {
   plaintext: ?string,
 }) => {
   const {
-    coinbase, deployedContract, dispatch, validTest, plaintext, handleSubmit,
+    coinbase, deployedContract, dispatch, validTest, plaintext, handleSubmit, reset,
     error, submitting, pristine, asyncValidating,
   } = props
-  const onSubmit = ({ plaintext }) => solve(deployedContract, plaintext)
+  const onSubmit = ({ plaintext }) => solve(deployedContract, plaintext).then(reset)
 
   const onTest = () => {
     if (deployedContract) {
