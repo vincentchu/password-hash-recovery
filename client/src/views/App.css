@@ -1,3 +1,16 @@
+.by-line {
+  font-size: 1.5em;
+  font-weight: 400;
+  color: #777; 
+}
+
+.abstract {
+  margin-left: 8%;
+  margin-right: 8%;
+  text-align: justify;
+  font-size: 18px;
+}
+
 .password-hash {
   word-wrap: break-word;
   max-width: 85%;
