@@ -2,6 +2,7 @@
 import React from 'react'
 import BigNumber from 'bignumber.js'
 
+import type { NetworkType } from '../state/session'
 import type { Event } from '../state/events'
 
 export const truncateAddr = (addr: string): string => {
@@ -117,4 +118,23 @@ export const attemptFailedEventsFor = (contract: Object): Promise<Event[]> => {
   const cb = (fn) => contract.AttemptFailed({}, TimeFrame).get(fn)
 
   return promisify(cb)
+}
+
+export const getNetwork = (): Promise<NetworkType> => {
+  if (typeof window.web3 !== 'undefined') {
+    return promisify(window.web3.version.getNetwork).then((networkId) => {
+      switch (networkId) {
+        case '1505855750115':
+          return 'development'
+
+        case '4':
+          return 'rinkeby'
+
+        default:
+          return 'unknown'
+      }
+    })
+  }
+
+  return Promise.resolve('unknown')
 }

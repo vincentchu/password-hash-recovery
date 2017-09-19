@@ -2,7 +2,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import Warning from './Warning'
-import { checkWeb3 } from '../state/session'
+import { getNetwork } from './helpers'
+import { checkWeb3, setNetwork } from '../state/session'
 
 import type { SessionStore } from '../state/session'
 
@@ -10,7 +11,10 @@ import './App.css'
 
 class App extends React.Component {
   componentWillMount() {
-    setTimeout(() => this.props.dispatch(checkWeb3()), 200)
+    setTimeout(() => {
+      this.props.dispatch(checkWeb3())
+      getNetwork().then((networkType) => this.props.dispatch(setNetwork(networkType)))
+    }, 200)
   }
 
   props: {
