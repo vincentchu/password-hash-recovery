@@ -38,6 +38,8 @@ class App extends React.Component {
         <div className="container">
           { this.props.children }
         </div>
+
+        <div className="footer" />
       </div>
     )
   }
