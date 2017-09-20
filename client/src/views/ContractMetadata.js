@@ -1,16 +1,19 @@
 // @flow
 import React from 'react'
 import CopyToClipboardButton from './CopyToClipboardButton'
-import { displayDenomination, truncateAddr, linkForAddr } from './helpers'
+import { displayDenomination, HashLink } from './helpers'
 
+import type { NetworkType } from '../state/session'
 import type { Contract } from '../state/contracts'
 import type { BigNumber } from 'bignumber.js'
 
 const ContractMetadata = (props: {
+  network: NetworkType,
   contract: Contract,
   bounty?: BigNumber,
 }) => {
   const {
+    network,
     bounty,
     contract: { contractAddress, passwordSha1Hash },
   } = props
@@ -29,9 +32,7 @@ const ContractMetadata = (props: {
       <dl className="dl-horizontal">
         <dt>Contract Address</dt>
         <dd>
-          <a href={linkForAddr(contractAddress)}>
-            { truncateAddr(contractAddress) }
-          </a>
+          <HashLink network={network} addr={contractAddress} truncate />
         </dd>
 
         <dt>Current Bounty</dt>

@@ -12,17 +12,39 @@ export const truncateAddr = (addr: string): string => {
   return `${firstPart}...${lastPart}`
 }
 
-export const linkForAddr = (addr: string) => `https://etherscan.io/address/${addr}`
+export const linkForAddr = (network: NetworkType, addr: string) => {
+  let host = ''
+  switch (network) {
+    case 'development':
+      host = 'local.'
+      break
+
+    case 'rinkeby':
+      host = 'rinkeby.'
+      break
+
+    case 'main':
+      host = ''
+      break
+
+    case 'unknown':
+      host = 'unk'
+      break
+  }
+
+  return `https://${host}etherscan.io/address/${addr}`
+}
 
 export const HashLink = (props: {
+  network: NetworkType,
   addr: string,
   truncate?: bool,
 }) => {
-  const { addr, truncate } = props
+  const { network, addr, truncate } = props
   const displayAddr = truncate ? truncateAddr(addr) : addr
 
   return (
-    <a href={linkForAddr(addr)}>
+    <a href={linkForAddr(network, addr)}>
       { displayAddr }
     </a>
   )

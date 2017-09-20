@@ -32,7 +32,7 @@ const Home = (props: {
       <div className="row">
         { contracts.map((contract, i) => (
           <div key={i} className="col-md-4">
-            <ContractView contract={contract} form={contract.contractAddress} />
+            <ContractView network={network} contract={contract} form={contract.contractAddress} />
           </div>
         )) }
       </div>
