@@ -14,7 +14,7 @@ const pollForWeb3 = (dispatch: Function) => {
     nTimes += 1
 
     if (nTimes < 100000) {
-      setTimeout(poller, 500)
+      setTimeout(poller, 200)
     }
   }
 
@@ -24,7 +24,6 @@ const pollForWeb3 = (dispatch: Function) => {
 class App extends React.Component {
   componentWillMount() {
     pollForWeb3(this.props.dispatch)
-    // setTimeout(() => this.props.dispatch(checkWeb3()), 200)
   }
 
   props: {
