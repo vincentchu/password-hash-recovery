@@ -126,7 +126,7 @@ export const solve = (contract: ?Object, plaintext: string): Promise<any> => {
   return Promise.resolve(true)
 }
 
-const TimeFrame = { fromBlock: 0, toBlock: 'latest' }
+const TimeFrame = { fromBlock: 928811, toBlock: 'latest' }
 
 export const passwordCrackedEventsFor = (contract: Object): Promise<Event[]> => {
   // TODO(vc): Someting is weird here. Keep getting undefined errors if I try and pass the

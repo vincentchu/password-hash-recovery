@@ -76,8 +76,16 @@ const loadContract = (BaseComponent: Function | typeof React.Component) => {
       network: NetworkType,
     }
 
+    componentWillMount() {
+      if (!this.state.loaded && this.props.web3Present) {
+        this.loadContract(this.props.contract.contractAddress)
+      }
+    }
+
     componentWillReceiveProps(newProps) {
+      console.log('componentWillReceiveProps', newProps)
       if (!this.state.loaded && newProps.web3Present || (newProps.network !== this.state.network)) {
+        console.log('>> booyah')
         this.loadContract(this.props.contract.contractAddress)
         this.setState({ network: newProps.network })
       }
@@ -85,8 +93,10 @@ const loadContract = (BaseComponent: Function | typeof React.Component) => {
 
     loadContract = (contractAddress: string) => {
       const contract = window.web3.eth.contract(PasswordHashRecovery.abi)
+      console.log('CONTRACT', contract)
 
       try {
+        console.log('TRY')
         const deployedContract = contract.at(contractAddress)
         window.deployedContract = deployedContract
 
@@ -101,7 +111,7 @@ const loadContract = (BaseComponent: Function | typeof React.Component) => {
           })
         })
 
-        pollForEvents(deployedContract, this.props.dispatch)
+        // pollForEvents(deployedContract, this.props.dispatch)
       } catch (err) {
         console.log('Error on contract instantiation:', err)  // eslint-disable-line no-console
       }
