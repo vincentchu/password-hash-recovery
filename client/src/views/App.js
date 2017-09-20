@@ -1,16 +1,29 @@
 // @flow
 import React from 'react'
 import { connect } from 'react-redux'
-import Warning from './Warning'
 import { checkWeb3 } from '../state/session'
 
 import type { SessionStore } from '../state/session'
 
 import './App.css'
 
+const pollForWeb3 = (dispatch: Function) => {
+  let nTimes = 0
+  const poller = () => {
+    dispatch(checkWeb3())
+    nTimes += 1
+
+    if (nTimes < 100000) {
+      setTimeout(poller, 200)
+    }
+  }
+
+  poller()
+}
+
 class App extends React.Component {
   componentWillMount() {
-    setTimeout(() => this.props.dispatch(checkWeb3()), 200)
+    pollForWeb3(this.props.dispatch)
   }
 
   props: {
@@ -22,7 +35,6 @@ class App extends React.Component {
   render() {
     return (
       <div>
-        { !this.props.web3Present && <Warning /> }
         <div className="container">
           { this.props.children }
         </div>

@@ -5,7 +5,7 @@ import { bountyFor, passwordCrackedEventsFor, attemptFailedEventsFor } from './h
 import { updateEvents } from '../state/events'
 
 import type { Contract } from '../state/contracts'
-import type { SessionStore } from '../state/session'
+import type { NetworkType, SessionStore } from '../state/session'
 import type { BigNumber } from 'bignumber.js'
 
 // $FlowFixMe - Flow can't see into the truffle dir
@@ -45,16 +45,27 @@ const mapStateToProps = (state: {
 }) => ({
   web3Present: state.session.web3Present,
   coinbase: state.session.coinbase,
+  network: state.session.network,
 })
+
+type PropType = {
+  web3Present: bool,
+  coinbase: ?string,
+  network: NetworkType,
+  contract: Contract,
+  dispatch: Function,
+}
 
 const loadContract = (BaseComponent: Function | typeof React.Component) => {
   class WrappedComponent extends React.Component {
-    constructor(props: Object) {
+    constructor(props: PropType) {
       super(props)
+
       this.state = {
         bounty: undefined,
         deployedContract: undefined,
         loaded: false,
+        network: props.network,
       }
     }
 
@@ -62,11 +73,13 @@ const loadContract = (BaseComponent: Function | typeof React.Component) => {
       bounty: ?BigNumber,
       deployedContract: ?Object,
       loaded: bool,
+      network: NetworkType,
     }
 
     componentWillReceiveProps(newProps) {
-      if (!this.state.loaded && newProps.web3Present) {
+      if (!this.state.loaded && newProps.web3Present || (newProps.network !== this.state.network)) {
         this.loadContract(this.props.contract.contractAddress)
+        this.setState({ network: newProps.network })
       }
     }
 
@@ -94,12 +107,7 @@ const loadContract = (BaseComponent: Function | typeof React.Component) => {
       }
     }
 
-    props: {
-      web3Present: bool,
-      coinbase: ?string,
-      contract: Contract,
-      dispatch: Function,
-    }
+    props: PropType
 
     render() {
       return (

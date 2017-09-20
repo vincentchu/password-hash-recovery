@@ -5,7 +5,7 @@ import { Alert, Glyphicon } from 'react-bootstrap'
 const MetamaskLink = 'https://metamask.io/'
 
 const Warning = () => (
-  <Alert className="header-warning" bsStyle="warning">
+  <Alert className="header-warning" bsStyle="danger">
     <strong>
       <Glyphicon glyph="exclamation-sign" /> Web3 Not Detected!
     </strong>

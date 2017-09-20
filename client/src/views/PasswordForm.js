@@ -43,6 +43,7 @@ const PasswordForm = (props: {
   deployedContract: ?Object,
   dispatch: Function,
   handleSubmit: Function,
+  reset: Function,
   error: bool,
   submitting: bool,
   pristine: bool,
@@ -51,14 +52,14 @@ const PasswordForm = (props: {
   plaintext: ?string,
 }) => {
   const {
-    coinbase, deployedContract, dispatch, validTest, plaintext, handleSubmit,
+    coinbase, deployedContract, dispatch, validTest, plaintext, handleSubmit, reset,
     error, submitting, pristine, asyncValidating,
   } = props
-  const onSubmit = ({ plaintext }) => solve(deployedContract, plaintext)
+  const onSubmit = ({ plaintext }) => solve(deployedContract, plaintext).then(reset)
 
   const onTest = () => {
     if (deployedContract) {
-      dispatch(startAsyncValidation('contract'))
+      dispatch(startAsyncValidation(deployedContract.address))
       const startedAt = new Date()
       deployedContract.solve.call(plaintext, { from: coinbase }, (err, result) => {
         const errors = result ? {} : { plaintext: 'Incorrect plaintext' }
@@ -67,7 +68,7 @@ const PasswordForm = (props: {
         const timeToWait = Math.max(0, 1000 - elapsed)
 
         setTimeout(() => {
-          dispatch(stopAsyncValidation('contract', errors))
+          dispatch(stopAsyncValidation(deployedContract.address, errors))
           dispatch(updateValidity('development', deployedContract.address, result))
         }, timeToWait)
       })
