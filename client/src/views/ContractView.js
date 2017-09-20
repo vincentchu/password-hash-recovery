@@ -29,7 +29,8 @@ const ContractView = (props: {
         <ContractMetadata bounty={bounty} network={network} contract={contract} />
 
         <PasswordForm
-          coinbase={coinbase} deployedContract={deployedContract} form={contract.contractAddress}
+          network={network} coinbase={coinbase}
+          deployedContract={deployedContract} form={contract.contractAddress}
         />
 
         <Events contract={contract} />
