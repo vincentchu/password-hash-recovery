@@ -11,12 +11,16 @@ import type { BigNumber } from 'bignumber.js'
 // $FlowFixMe - Flow can't see into the truffle dir
 import PasswordHashRecovery from '../../../truffle/build/contracts/PasswordHashRecovery.json' // eslint-disable-line
 
-const loadContractEvents = (contract: Object, dispatch: Function): Promise<bool> => {
+const loadContractEvents = (
+  contract: Object,
+  dispatch: Function,
+  blockNumber: ?number
+): Promise<bool> => {
   const contractAddress = contract.address
 
   return Promise.all([
-    passwordCrackedEventsFor(contract),
-    attemptFailedEventsFor(contract),
+    passwordCrackedEventsFor(contract, blockNumber),
+    attemptFailedEventsFor(contract, blockNumber),
   ]).then(([ crackedEvts, failedEvts ]) => {
     dispatch(updateEvents(contractAddress, 'PasswordCracked', crackedEvts))
     dispatch(updateEvents(contractAddress, 'AttemptFailed', failedEvts))
@@ -25,10 +29,10 @@ const loadContractEvents = (contract: Object, dispatch: Function): Promise<bool>
   })
 }
 
-const pollForEvents = (contract: Object, dispatch: Function) => {
+const pollForEvents = (contract: Object, dispatch: Function, blockNumber: ?number) => {
   let nTimes = 0
   const poller = () => {
-    loadContractEvents(contract, dispatch)
+    loadContractEvents(contract, dispatch, blockNumber)
     nTimes += 1
 
     if (nTimes < 1000) {
@@ -78,31 +82,29 @@ const loadContract = (BaseComponent: Function | typeof React.Component) => {
 
     componentWillMount() {
       if (!this.state.loaded && this.props.web3Present) {
-        this.loadContract(this.props.contract.contractAddress)
+        const { contractAddress, blockNumber } = this.props.contract
+        this.loadContract(contractAddress, blockNumber)
       }
     }
 
     componentWillReceiveProps(newProps) {
-      console.log('componentWillReceiveProps', newProps)
       if (!this.state.loaded && newProps.web3Present || (newProps.network !== this.state.network)) {
-        console.log('>> booyah')
-        this.loadContract(this.props.contract.contractAddress)
+        const { contractAddress, blockNumber } = this.props.contract
+        this.loadContract(contractAddress, blockNumber)
         this.setState({ network: newProps.network })
       }
     }
 
-    loadContract = (contractAddress: string) => {
+    loadContract = (contractAddress: string, blockNumber: ?number) => {
       const contract = window.web3.eth.contract(PasswordHashRecovery.abi)
-      console.log('CONTRACT', contract)
 
       try {
-        console.log('TRY')
         const deployedContract = contract.at(contractAddress)
         window.deployedContract = deployedContract
 
         Promise.all([
           bountyFor(deployedContract),
-          loadContractEvents(deployedContract, this.props.dispatch),
+          loadContractEvents(deployedContract, this.props.dispatch, blockNumber),
         ]).then(([ bounty ]) => {
           this.setState({
             loaded: true,
@@ -111,7 +113,7 @@ const loadContract = (BaseComponent: Function | typeof React.Component) => {
           })
         })
 
-        // pollForEvents(deployedContract, this.props.dispatch)
+        pollForEvents(deployedContract, this.props.dispatch, blockNumber)
       } catch (err) {
         console.log('Error on contract instantiation:', err)  // eslint-disable-line no-console
       }

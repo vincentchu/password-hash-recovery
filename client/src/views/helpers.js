@@ -126,18 +126,24 @@ export const solve = (contract: ?Object, plaintext: string): Promise<any> => {
   return Promise.resolve(true)
 }
 
-const TimeFrame = { fromBlock: 928811, toBlock: 'latest' }
-
-export const passwordCrackedEventsFor = (contract: Object): Promise<Event[]> => {
+export const passwordCrackedEventsFor = (
+  contract: Object,
+  blockNumber: ?number
+): Promise<Event[]> => {
   // TODO(vc): Someting is weird here. Keep getting undefined errors if I try and pass the
   // `get` function in directly. Must be some scoping issue.
-  const cb = (fn) => contract.PasswordCracked({}, TimeFrame).get(fn)
+  const fromBlock = blockNumber || 0
+  const cb = (fn) => contract.PasswordCracked({}, { fromBlock, toBlock: 'latest' }).get(fn)
 
   return promisify(cb)
 }
 
-export const attemptFailedEventsFor = (contract: Object): Promise<Event[]> => {
-  const cb = (fn) => contract.AttemptFailed({}, TimeFrame).get(fn)
+export const attemptFailedEventsFor = (
+  contract: Object,
+  blockNumber: ?number
+): Promise<Event[]> => {
+  const fromBlock = blockNumber || 0
+  const cb = (fn) => contract.AttemptFailed({}, { fromBlock, toBlock: 'latest' }).get(fn)
 
   return promisify(cb)
 }
