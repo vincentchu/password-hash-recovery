@@ -2,6 +2,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import ContractHeader from './ContractHeader'
+import ContractImplementation from './ContractImplementation'
 import ContractView from './ContractView'
 import Exposition from './Exposition'
 
@@ -19,6 +20,9 @@ const Home = (props: {
     <div>
       <div className="page-header">
         <h1>Smart Contracts for Cracking Passwords</h1>
+        <div className="by-line">
+          <a href="">Vincent Chu (@vincentchu)</a>, Initialized Capital
+        </div>
       </div>
 
       <Exposition />
@@ -32,6 +36,8 @@ const Home = (props: {
           </div>
         )) }
       </div>
+
+      <ContractImplementation />
     </div>
   )
 }

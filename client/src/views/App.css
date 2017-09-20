@@ -1,3 +1,13 @@
+.splash {
+  margin-top: 40px;
+}
+.footer {
+  background-color: #2a2730;
+  min-height: 150px;
+  margin-top: 50px;
+  color: white;
+}
+
 .by-line {
   font-size: 1.5em;
   font-weight: 400;
@@ -5,8 +15,8 @@
 }
 
 .abstract {
-  margin-left: 8%;
-  margin-right: 8%;
+  margin-left: 10%;
+  margin-right: 10%;
   text-align: justify;
   font-size: 18px;
 }
