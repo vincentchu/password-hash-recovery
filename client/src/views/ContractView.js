@@ -26,7 +26,9 @@ const ContractView = (props: {
       <Panel bsStyle={panelStyle} header={header}>
         <ContractMetadata bounty={bounty} contract={contract} />
 
-        <PasswordForm coinbase={coinbase} deployedContract={deployedContract} />
+        <PasswordForm
+          coinbase={coinbase} deployedContract={deployedContract} form={contract.contractAddress}
+        />
 
         <Events contract={contract} />
       </Panel>

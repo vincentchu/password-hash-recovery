@@ -1,7 +1,7 @@
 // @flow
 import { mergeDeepRight } from 'ramda'
 
-export type Network = 'development' | 'rinkeby' | 'main'
+import type { NetworkType } from './session'
 
 export type Contract = {
   title: string,
@@ -12,7 +12,7 @@ export type Contract = {
 }
 
 export type ContractStore = {
-  [key: Network]: Contract[]
+  [key: NetworkType]: Contract[]
 }
 
 const mergeValidity = (contracts: Contract[], address: string, validity: ?bool): Contract[] => {
@@ -20,7 +20,7 @@ const mergeValidity = (contracts: Contract[], address: string, validity: ?bool):
 
   contracts.forEach((contract) => {
     if (contract.contractAddress === address) {
-      contract.validTest = validity
+      contract.validTest = validity || false
     }
 
     updatedContracts.push(contract)
@@ -35,23 +35,47 @@ const initState = {
       title: 'Easy Difficulty',
       panelStyle: 'success',
       contractAddress: '0x9ad463357ddd5fea6b0150a9948a4fc447c07346',
-      passwordSha1Hash: '0xa9993e364706816aba3e25717850c26c9cd0d89d',
+      passwordSha1Hash: 'f3bbbd66a63d4bf1747940578ec3d0103530e21d',
       validTest: false,
     },
-    // {
-    //   title: 'Medium Difficulty',
-    //   panelStyle: 'warning',
-    //   // contractAddress: '0x9ad463357ddd5fea6b0150a9948a4fc447c07346',
-    //   contractAddress: '0x9ad463357ddd5fea6b0150a9948a4fc447c07346-zzz',
-    //   passwordSha1Hash: '0xa9993e364706816aba3e25717850c26c9cd0d89d',
-    // },
-    // {
-    //   title: 'Challenging Difficulty',
-    //   panelStyle: 'danger',
-    //   // contractAddress: '0x9ad463357ddd5fea6b0150a9948a4fc447c07346',
-    //   contractAddress: '0x9ad463357ddd5fea6b0150a9948a4fc447c07346-zzz',
-    //   passwordSha1Hash: '0xa9993e364706816aba3e25717850c26c9cd0d89d',
-    // },
+    {
+      title: 'Medium Difficulty',
+      panelStyle: 'warning',
+      contractAddress: '0x836ae85ccef18ef6738d9f8fa0f2e118ec804c1c',
+      passwordSha1Hash: '0x9373e7c1555c33721d878e445a812cc577719a61',
+      validTest: false,
+    },
+    {
+      title: 'Challenging Difficulty',
+      panelStyle: 'danger',
+      contractAddress: '0xce7d7e78270ceaee4c1f93f96802a504a84b6eaa',
+      passwordSha1Hash: '0x1cee85b543db7ce8d3536e6a542ddb77d15009d7',
+      validTest: false,
+    },
+  ],
+
+  rinkeby: [
+    {
+      title: 'Easy Difficulty',
+      panelStyle: 'success',
+      contractAddress: '0x9ad463357ddd5fea6b0150a9948a4fc447c07346',
+      passwordSha1Hash: 'f3bbbd66a63d4bf1747940578ec3d0103530e21d',
+      validTest: false,
+    },
+    {
+      title: 'Medium Difficulty',
+      panelStyle: 'warning',
+      contractAddress: '0x836ae85ccef18ef6738d9f8fa0f2e118ec804c1c',
+      passwordSha1Hash: '0x9373e7c1555c33721d878e445a812cc577719a61',
+      validTest: false,
+    },
+    {
+      title: 'Challenging Difficulty',
+      panelStyle: 'danger',
+      contractAddress: '0xce7d7e78270ceaee4c1f93f96802a504a84b6eaa',
+      passwordSha1Hash: '0x1cee85b543db7ce8d3536e6a542ddb77d15009d7',
+      validTest: false,
+    },
   ],
 }
 
@@ -61,7 +85,7 @@ export const reducer = (
   state: ContractStore = initState,
   action: {
     type: string,
-    network?: Network,
+    network?: NetworkType,
     address?: string,
     validity?: bool,
   }
@@ -84,7 +108,7 @@ export const reducer = (
   }
 }
 
-export const updateValidity = (network: Network, address: string, validity: bool) => ({
+export const updateValidity = (network: NetworkType, address: string, validity: bool) => ({
   type: UPDATE_VALIDITY,
   network,
   address,

@@ -6,7 +6,6 @@ import { reducer as sessionReducer } from './state/session'
 import { reducer as contractsReducer } from './state/contracts'
 import { reducer as eventsReducer } from './state/events'
 
-const logger = createLogger()
 const reducer = combineReducers({
   form: formReducer,
   session: sessionReducer,
@@ -14,6 +13,8 @@ const reducer = combineReducers({
   events: eventsReducer,
 })
 
-const store = createStore(reducer, applyMiddleware(logger))
+// const logger = createLogger()
+// const store = createStore(reducer, applyMiddleware(logger))
+const store = createStore(reducer)
 
 export default store
