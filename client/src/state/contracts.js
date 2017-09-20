@@ -75,7 +75,7 @@ const initState = {
     {
       title: 'Challenging Difficulty',
       panelStyle: 'danger',
-      contractAddress: '0x7c45ff1f2738827d4f89b3cf5f87bb36f939a2c0',
+      contractAddress: '0x6c7828a1e563aaa2e79de1d3e951fdf997528a96',
       passwordSha1Hash: '0x1cee85b543db7ce8d3536e6a542ddb77d15009d7',
       validTest: false,
       blockNumber: 928815,
