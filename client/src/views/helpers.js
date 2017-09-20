@@ -122,15 +122,19 @@ export const attemptFailedEventsFor = (contract: Object): Promise<Event[]> => {
 
 export const getNetwork = (): NetworkType => {
   if (typeof window.web3 !== 'undefined') {
-    const networkId = window.web3.version.network
+    const networkId = parseInt(window.web3.version.network)
     switch (networkId) {
-      case '1505855750115':
-        return 'development'
+      case 1:
+        return 'main'
 
-      case '4':
+      case 4:
         return 'rinkeby'
 
       default:
+        if (networkId > 100) {
+          return 'development'
+        }
+
         return 'unknown'
     }
   }

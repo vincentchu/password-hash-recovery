@@ -1,7 +1,7 @@
 // @flow
 import { getNetwork } from '../views/helpers'
 
-export type NetworkType = 'development' | 'rinkeby' | 'unknown'
+export type NetworkType = 'development' | 'rinkeby' | 'main' |'unknown'
 
 export type SessionStore = {
   web3Present: bool,
