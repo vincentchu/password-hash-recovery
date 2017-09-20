@@ -7,9 +7,24 @@ import type { SessionStore } from '../state/session'
 
 import './App.css'
 
+const pollForWeb3 = (dispatch: Function) => {
+  let nTimes = 0
+  const poller = () => {
+    dispatch(checkWeb3())
+    nTimes += 1
+
+    if (nTimes < 100000) {
+      setTimeout(poller, 500)
+    }
+  }
+
+  poller()
+}
+
 class App extends React.Component {
   componentWillMount() {
-    setTimeout(() => this.props.dispatch(checkWeb3()), 200)
+    pollForWeb3(this.props.dispatch)
+    // setTimeout(() => this.props.dispatch(checkWeb3()), 200)
   }
 
   props: {
