@@ -1,7 +1,6 @@
 // @flow
 import React from 'react'
 import { connect } from 'react-redux'
-import Warning from './Warning'
 import { checkWeb3 } from '../state/session'
 
 import type { SessionStore } from '../state/session'
@@ -22,7 +21,6 @@ class App extends React.Component {
   render() {
     return (
       <div>
-        { !this.props.web3Present && <Warning /> }
         <div className="container">
           { this.props.children }
         </div>

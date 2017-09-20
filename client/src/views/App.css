@@ -7,10 +7,6 @@
   margin-bottom: 20px;
 }
 
-.header-warning {
-  margin: 10px 30px;
-}
-
 .button-bar {
   display: flex;
   flex-direction: row;
