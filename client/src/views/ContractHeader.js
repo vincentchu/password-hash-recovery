@@ -22,7 +22,7 @@ const ContractHeader = (props: {
 
       { web3Present && validNetwork && (
         <Alert bsStyle="success">
-          <strong>Current Network: { network }</strong> This network is supported!
+          <strong>Current Network: { network }</strong> This network is supported.
         </Alert>
       ) }
 
@@ -30,7 +30,7 @@ const ContractHeader = (props: {
         <Alert bsStyle="warning">
           <strong>Current Network: { network} </strong> This network is not current supported.
           { ' ' }
-          Please change to the Ethereum Main or Rinkeyby Networks.
+          Please change to the Ethereum Main or Rinkeyby Network.
         </Alert>
       ) }
     </div>

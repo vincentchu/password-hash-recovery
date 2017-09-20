@@ -77,7 +77,6 @@ const loadContract = (BaseComponent: Function | typeof React.Component) => {
     }
 
     componentWillReceiveProps(newProps) {
-      console.log('newProps', newProps)
       if (!this.state.loaded && newProps.web3Present || (newProps.network !== this.state.network)) {
         this.loadContract(this.props.contract.contractAddress)
         this.setState({ network: newProps.network })

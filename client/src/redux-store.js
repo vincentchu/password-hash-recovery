@@ -14,6 +14,7 @@ const reducer = combineReducers({
   events: eventsReducer,
 })
 
-const store = createStore(reducer, applyMiddleware(logger))
+// const store = createStore(reducer, applyMiddleware(logger))
+const store = createStore(reducer)
 
 export default store
