@@ -32,7 +32,7 @@ export const linkForAddr = (
       break
 
     case 'unknown':
-      host = 'unk'
+      host = ''
       break
   }
 

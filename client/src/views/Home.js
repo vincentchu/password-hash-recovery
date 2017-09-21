@@ -51,7 +51,7 @@ const mapStateToProps = (state: {
     contracts,
   } = state
 
-  const currContracts = contracts[network] || contracts.rinkeby
+  const currContracts = contracts[network] || contracts.main
 
   return {
     network,

@@ -6,7 +6,7 @@ import Warning from './Warning'
 
 import type { NetworkType } from '../state/session'
 
-const ValidNetworks = new Set([ 'development', 'rinkeby' ])
+const ValidNetworks = new Set([ 'development', 'rinkeby', 'main' ])
 
 const ContractHeader = (props: {
   web3Present: bool,
