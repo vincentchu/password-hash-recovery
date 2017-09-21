@@ -81,6 +81,32 @@ const initState = {
       blockNumber: 928815,
     },
   ],
+  main: [
+    {
+      title: 'Easy Difficulty',
+      panelStyle: 'success',
+      contractAddress: '0x49b3869212716f390b347f05fdfb2a45845f8d9c',
+      passwordSha1Hash: '0xf3bbbd66a63d4bf1747940578ec3d0103530e21d',
+      validTest: false,
+      blockNumber: 4299786,
+    },
+    {
+      title: 'Medium Difficulty',
+      panelStyle: 'warning',
+      contractAddress: '0x057032b72cd5fbbb3faaa77d823ca252f606934c',
+      passwordSha1Hash: '0x9373e7c1555c33721d878e445a812cc577719a61',
+      validTest: false,
+      blockNumber: 4299788,
+    },
+    {
+      title: 'Challenging Difficulty',
+      panelStyle: 'danger',
+      contractAddress: '0x784d4ffc495a391cb699bccf93e9933beef95023',
+      passwordSha1Hash: '0x298a78814dbc34d0e43f77eb3314e20c6dd04a2e',
+      validTest: false,
+      blockNumber: 4299803,
+    },
+  ],
 }
 
 const UPDATE_VALIDITY = 'contracts/UPDATE_VALIDITY'
