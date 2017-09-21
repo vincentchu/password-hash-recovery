@@ -34,4 +34,19 @@ module.exports = {
       bounty: '2000000000000000000', // 2 Ether
     },
   ],
+
+  main: [
+    {
+      hash: '0xf3bbbd66a63d4bf1747940578ec3d0103530e21d',
+      bounty: '8000000000000000', // 0.008 Ether
+    },
+    {
+      hash: '0x9373e7c1555c33721d878e445a812cc577719a61',
+      bounty: '16000000000000000', // 0.016 Ether
+    },
+    {
+      hash: '0x298a78814dbc34d0e43f77eb3314e20c6dd04a2e',
+      bounty: '800000000000000000', // 0.8 Ether
+    },
+  ],
 }
