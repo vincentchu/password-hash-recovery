@@ -37,7 +37,7 @@ const EventsTable = (props: {
               { reverse(events).map((evt) => (
                 <tr key={evt.transactionHash}>
                   <td>
-                    <HashLink network={network} addr={evt.transactionHash} truncate />
+                    <HashLink network={network} addr={evt.transactionHash} linkType="tx" truncate />
                     { coinbase === (evt.args.source || evt.args.crackedBy || -1) && ' (you)' }
                   </td>
                   <td>{evt.args.password}</td>
