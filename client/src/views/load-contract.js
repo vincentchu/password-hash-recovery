@@ -11,6 +11,8 @@ import type { BigNumber } from 'bignumber.js'
 // $FlowFixMe - Flow can't see into the truffle dir
 import PasswordHashRecovery from '../../../truffle/build/contracts/PasswordHashRecovery.json' // eslint-disable-line
 
+window.PasswordHashRecovery = PasswordHashRecovery
+
 const loadContractEvents = (
   contract: Object,
   dispatch: Function,
@@ -96,15 +98,16 @@ const loadContract = (BaseComponent: Function | typeof React.Component) => {
     }
 
     loadContract = (contractAddress: string, blockNumber: ?number) => {
-      const contract = window.web3.eth.contract(PasswordHashRecovery.abi)
-
       try {
-        const deployedContract = contract.at(contractAddress)
+        const deployedContract = new window.web3.eth.Contract(
+          PasswordHashRecovery.abi,
+          contractAddress
+        )
         window.deployedContract = deployedContract
 
         Promise.all([
           bountyFor(deployedContract),
-          loadContractEvents(deployedContract, this.props.dispatch, blockNumber),
+          // loadContractEvents(deployedContract, this.props.dispatch, blockNumber),
         ]).then(([ bounty ]) => {
           this.setState({
             loaded: true,
@@ -113,7 +116,7 @@ const loadContract = (BaseComponent: Function | typeof React.Component) => {
           })
         })
 
-        pollForEvents(deployedContract, this.props.dispatch, blockNumber)
+        // pollForEvents(deployedContract, this.props.dispatch, blockNumber)
       } catch (err) {
         console.log('Error on contract instantiation:', err)  // eslint-disable-line no-console
       }

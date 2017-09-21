@@ -83,6 +83,8 @@ const initState = {
   ],
 }
 
+window.contracts = initState
+
 const UPDATE_VALIDITY = 'contracts/UPDATE_VALIDITY'
 
 export const reducer = (

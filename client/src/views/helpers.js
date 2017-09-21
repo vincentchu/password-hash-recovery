@@ -118,7 +118,9 @@ export const displayDenomination = (value: BigNumber): string => {
 }
 
 export const bountyFor = (contract: Object): Promise<BigNumber> =>
-  promisify(contract.bounty)
+  contract.methods.bounty()
+    .call()
+    .then((bounty) => new BigNumber(bounty))
 
 export const solve = (contract: ?Object, plaintext: string): Promise<any> => {
   if (contract) {
@@ -138,7 +140,7 @@ export const passwordCrackedEventsFor = (
   // TODO(vc): Someting is weird here. Keep getting undefined errors if I try and pass the
   // `get` function in directly. Must be some scoping issue.
   const fromBlock = blockNumber || 0
-  const cb = (fn) => contract.PasswordCracked({}, { fromBlock, toBlock: 'latest' }).get(fn)
+  const cb = (fn) => contract.events.PasswordCracked({ fromBlock, toBlock: 'latest' }, fn)
 
   return promisify(cb)
 }
@@ -148,29 +150,34 @@ export const attemptFailedEventsFor = (
   blockNumber: ?number
 ): Promise<Event[]> => {
   const fromBlock = blockNumber || 0
-  const cb = (fn) => contract.AttemptFailed({}, { fromBlock, toBlock: 'latest' }).get(fn)
+  // const cb = (fn) => contract.events.AttemptFailed({ fromBlock, toBlock: 'latest' }, fn)
 
-  return promisify(cb)
+  return contract.getPastEvents({ fromBlock, toBlock: 'latest' })
+
+
+
+  // return promisify(cb)
 }
 
 export const getNetwork = (): NetworkType => {
-  if (typeof window.web3 !== 'undefined') {
-    const networkId = parseInt(window.web3.version.network)
-    switch (networkId) {
-      case 1:
-        return 'main'
+  return 'rinkeby'
+  // if (typeof window.web3 !== 'undefined') {
+  //   const networkId = web3.eth.net.getId()
+  //   switch (networkId) {
+  //     case 1:
+  //       return 'main'
 
-      case 4:
-        return 'rinkeby'
+  //     case 4:
+  //       return 'rinkeby'
 
-      default:
-        if (networkId > 100) {
-          return 'development'
-        }
+  //     default:
+  //       if (networkId > 100) {
+  //         return 'development'
+  //       }
 
-        return 'unknown'
-    }
-  }
+  //       return 'unknown'
+  //   }
+  // }
 
-  return 'unknown'
+  // return 'unknown'
 }
