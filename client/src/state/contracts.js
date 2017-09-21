@@ -9,6 +9,7 @@ export type Contract = {
   contractAddress: string,
   passwordSha1Hash: string,
   validTest: bool,
+  blockNumber?: number,
 }
 
 export type ContractStore = {
@@ -35,7 +36,7 @@ const initState = {
       title: 'Easy Difficulty',
       panelStyle: 'success',
       contractAddress: '0x9ad463357ddd5fea6b0150a9948a4fc447c07346',
-      passwordSha1Hash: 'f3bbbd66a63d4bf1747940578ec3d0103530e21d',
+      passwordSha1Hash: '0xf3bbbd66a63d4bf1747940578ec3d0103530e21d',
       validTest: false,
     },
     {
@@ -58,23 +59,26 @@ const initState = {
     {
       title: 'Easy Difficulty',
       panelStyle: 'success',
-      contractAddress: '0x9ad463357ddd5fea6b0150a9948a4fc447c07346',
-      passwordSha1Hash: 'f3bbbd66a63d4bf1747940578ec3d0103530e21d',
+      contractAddress: '0xaf348b3d2e4a9e7924abd1732354c71e21e9eb25',
+      passwordSha1Hash: '0xf3bbbd66a63d4bf1747940578ec3d0103530e21d',
       validTest: false,
+      blockNumber: 928811,
     },
     {
       title: 'Medium Difficulty',
       panelStyle: 'warning',
-      contractAddress: '0x836ae85ccef18ef6738d9f8fa0f2e118ec804c1c',
+      contractAddress: '0x327892bfaac14de1fdfdef3ef0dd5caf10b55292',
       passwordSha1Hash: '0x9373e7c1555c33721d878e445a812cc577719a61',
       validTest: false,
+      blockNumber: 928813,
     },
     {
       title: 'Challenging Difficulty',
       panelStyle: 'danger',
-      contractAddress: '0xce7d7e78270ceaee4c1f93f96802a504a84b6eaa',
+      contractAddress: '0x6c7828a1e563aaa2e79de1d3e951fdf997528a96',
       passwordSha1Hash: '0x1cee85b543db7ce8d3536e6a542ddb77d15009d7',
       validTest: false,
+      blockNumber: 928815,
     },
   ],
 }

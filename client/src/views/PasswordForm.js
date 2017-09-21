@@ -8,6 +8,7 @@ import classnames from 'classnames'
 import { solve } from './helpers'
 import { updateValidity } from '../state/contracts'
 
+import type { NetworkType } from '../state/session'
 import type { ContractStore } from '../state/contracts'
 
 const InputField = (props: {
@@ -39,6 +40,7 @@ const InputField = (props: {
 }
 
 const PasswordForm = (props: {
+  network: NetworkType,
   coinbase: string,
   deployedContract: ?Object,
   dispatch: Function,
@@ -52,7 +54,7 @@ const PasswordForm = (props: {
   plaintext: ?string,
 }) => {
   const {
-    coinbase, deployedContract, dispatch, validTest, plaintext, handleSubmit, reset,
+    network, coinbase, deployedContract, dispatch, validTest, plaintext, handleSubmit, reset,
     error, submitting, pristine, asyncValidating,
   } = props
   const onSubmit = ({ plaintext }) => solve(deployedContract, plaintext).then(reset)
@@ -69,7 +71,7 @@ const PasswordForm = (props: {
 
         setTimeout(() => {
           dispatch(stopAsyncValidation(deployedContract.address, errors))
-          dispatch(updateValidity('development', deployedContract.address, result))
+          dispatch(updateValidity(network, deployedContract.address, result))
         }, timeToWait)
       })
     }
@@ -107,10 +109,11 @@ const PasswordForm = (props: {
 
 const mapStateToProps = (
   state: { contracts: ContractStore },
-  props: { deployedContract: ?Object }
+  props: { network: NetworkType, deployedContract: ?Object }
 ) => {
-  const addr = props.deployedContract && props.deployedContract.address
-  const contract = state.contracts.development.filter(
+  const { deployedContract, network } = props
+  const addr = deployedContract && deployedContract.address
+  const contract = (state.contracts[network] || []).filter(
     (contract) => contract.contractAddress === addr
   )[0]
 

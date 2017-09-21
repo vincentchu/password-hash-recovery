@@ -6,17 +6,19 @@ import ContractMetadata from './ContractMetadata'
 import Events from './Events'
 import PasswordForm from './PasswordForm'
 
+import type { NetworkType } from '../state/session'
 import type { Contract } from '../state/contracts'
 import type { BigNumber } from 'bignumber.js'
 
 const ContractView = (props: {
+  network: NetworkType,
   coinbase: ?string,
   contract: Contract,
   bounty: ?BigNumber,
   deployedContract: ?Object,
   dispatch: Function,
 }) => {
-  const { coinbase, contract, bounty, deployedContract } = props
+  const { network, coinbase, contract, bounty, deployedContract } = props
   const { title, panelStyle } = contract
 
   const header = (<h3>{ title }</h3>)
@@ -24,10 +26,11 @@ const ContractView = (props: {
   return (
     <div>
       <Panel bsStyle={panelStyle} header={header}>
-        <ContractMetadata bounty={bounty} contract={contract} />
+        <ContractMetadata bounty={bounty} network={network} contract={contract} />
 
         <PasswordForm
-          coinbase={coinbase} deployedContract={deployedContract} form={contract.contractAddress}
+          network={network} coinbase={coinbase}
+          deployedContract={deployedContract} form={contract.contractAddress}
         />
 
         <Events contract={contract} />

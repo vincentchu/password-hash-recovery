@@ -12,17 +12,44 @@ export const truncateAddr = (addr: string): string => {
   return `${firstPart}...${lastPart}`
 }
 
-export const linkForAddr = (addr: string) => `https://etherscan.io/address/${addr}`
+export const linkForAddr = (
+  network: NetworkType,
+  addr: string,
+  linkType: 'address' | 'tx' = 'address'
+) => {
+  let host = ''
+  switch (network) {
+    case 'development':
+      host = 'local.'
+      break
+
+    case 'rinkeby':
+      host = 'rinkeby.'
+      break
+
+    case 'main':
+      host = ''
+      break
+
+    case 'unknown':
+      host = 'unk'
+      break
+  }
+
+  return `https://${host}etherscan.io/${linkType}/${addr}`
+}
 
 export const HashLink = (props: {
+  network: NetworkType,
   addr: string,
+  linkType?: 'address' | 'tx',
   truncate?: bool,
 }) => {
-  const { addr, truncate } = props
+  const { network, addr, linkType, truncate } = props
   const displayAddr = truncate ? truncateAddr(addr) : addr
 
   return (
-    <a href={linkForAddr(addr)}>
+    <a href={linkForAddr(network, addr, linkType || 'address')}>
       { displayAddr }
     </a>
   )
@@ -104,18 +131,24 @@ export const solve = (contract: ?Object, plaintext: string): Promise<any> => {
   return Promise.resolve(true)
 }
 
-const TimeFrame = { fromBlock: 0, toBlock: 'latest' }
-
-export const passwordCrackedEventsFor = (contract: Object): Promise<Event[]> => {
+export const passwordCrackedEventsFor = (
+  contract: Object,
+  blockNumber: ?number
+): Promise<Event[]> => {
   // TODO(vc): Someting is weird here. Keep getting undefined errors if I try and pass the
   // `get` function in directly. Must be some scoping issue.
-  const cb = (fn) => contract.PasswordCracked({}, TimeFrame).get(fn)
+  const fromBlock = blockNumber || 0
+  const cb = (fn) => contract.PasswordCracked({}, { fromBlock, toBlock: 'latest' }).get(fn)
 
   return promisify(cb)
 }
 
-export const attemptFailedEventsFor = (contract: Object): Promise<Event[]> => {
-  const cb = (fn) => contract.AttemptFailed({}, TimeFrame).get(fn)
+export const attemptFailedEventsFor = (
+  contract: Object,
+  blockNumber: ?number
+): Promise<Event[]> => {
+  const fromBlock = blockNumber || 0
+  const cb = (fn) => contract.AttemptFailed({}, { fromBlock, toBlock: 'latest' }).get(fn)
 
   return promisify(cb)
 }

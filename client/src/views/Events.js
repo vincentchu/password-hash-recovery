@@ -6,16 +6,17 @@ import { reverse } from 'ramda'
 import { HashLink } from './helpers'
 
 import type { Event, EventsStore } from '../state/events'
-import type { SessionStore } from '../state/session'
+import type { SessionStore, NetworkType } from '../state/session'
 import type { Contract } from '../state/contracts'
 
 const EventsTable = (props: {
   title: string,
   emptyText: string,
   events: Event[],
+  network: NetworkType,
   coinbase: ?string,
 }) => {
-  const { coinbase, title, emptyText, events } = props
+  const { network, coinbase, title, emptyText, events } = props
 
   return (
     <div className="row events-table">
@@ -36,7 +37,7 @@ const EventsTable = (props: {
               { reverse(events).map((evt) => (
                 <tr key={evt.transactionHash}>
                   <td>
-                    <HashLink addr={evt.transactionHash} truncate />
+                    <HashLink network={network} addr={evt.transactionHash} linkType="tx" truncate />
                     { coinbase === (evt.args.source || evt.args.crackedBy || -1) && ' (you)' }
                   </td>
                   <td>{evt.args.password}</td>
@@ -51,21 +52,22 @@ const EventsTable = (props: {
 }
 
 const Events = (props: {
+  network: NetworkType,
   coinbase: ?string,
   passwordCrackedEvents: Event[],
   attemptFailedEvents: Event[],
 }) => {
-  const { coinbase, passwordCrackedEvents, attemptFailedEvents } = props
+  const { network, coinbase, passwordCrackedEvents, attemptFailedEvents } = props
   return (
     <div>
       <EventsTable
         title="Successful Cracks" emptyText="No Successful Cracks"
-        events={passwordCrackedEvents} coinbase={coinbase}
+        events={passwordCrackedEvents} network={network} coinbase={coinbase}
       />
 
       <EventsTable
         title="Failed Attempts" emptyText="No Failed Attempts"
-        events={attemptFailedEvents} coinbase={coinbase}
+        events={attemptFailedEvents} network={network} coinbase={coinbase}
       />
     </div>
   )
@@ -79,13 +81,14 @@ const mapStateToProps = (
   props: { contract: Contract }
 ) => {
   const address = props.contract.contractAddress
-  const coinbase = state.session.coinbase
+  const { coinbase, network } = state.session
   const events = state.events[address] || {}
 
   const passwordCrackedEvents = events.PasswordCracked || []
   const attemptFailedEvents = events.AttemptFailed || []
 
   return {
+    network,
     coinbase,
     passwordCrackedEvents,
     attemptFailedEvents,
