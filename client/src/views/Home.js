@@ -21,7 +21,8 @@ const Home = (props: {
       <div className="page-header">
         <h1>Smart Contracts for Cracking Passwords</h1>
         <div className="by-line">
-          <a href="">Vincent Chu (@vincentchu)</a>, Initialized Capital
+          <a href="https://twitter.com/vincentchu">Vincent Chu (@vincentchu)</a>,{' '}
+          Initialized Capital
         </div>
       </div>
 
