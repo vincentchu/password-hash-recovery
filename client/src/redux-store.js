@@ -16,6 +16,7 @@ const reducer = combineReducers({
 
 // const logger = createLogger()
 // const store = createStore(reducer, applyMiddleware(logger))
-const store = createStore(reducer, applyMiddleware(analytics))
+// const store = createStore(reducer, applyMiddleware(analytics))
+const store = createStore(reducer)
 
 export default store
