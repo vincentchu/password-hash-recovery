@@ -7,10 +7,10 @@ const MetamaskLink = 'https://metamask.io/'
 const Warning = () => (
   <Alert className="header-warning" bsStyle="danger">
     <strong>
-      <Glyphicon glyph="exclamation-sign" /> Web3 Not Detected!
+      <Glyphicon glyph="exclamation-sign" /> MetaMask Not Detected!
     </strong>
     {' '}
-    You won't be able to interact with smart contracts. To enable Web3 please install the
+    You won't be able to interact with smart contracts. To enable please install the
     {' '} <a href={MetamaskLink} className="alert-link">MetaMask Chrome plugin</a>.
   </Alert>
 )

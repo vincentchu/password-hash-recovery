@@ -24,7 +24,8 @@ export const reducer = (
 ): SessionStore => {
   switch (action.type) {
     case CHECK_WEB3: {
-      const web3Present = typeof window.web3 !== 'undefined'
+      const web3Present = (typeof window.web3 !== 'undefined') &&
+        (typeof window.web3.eth !== 'undefined')
       // $FlowFixMe - Can't instrospect type
       const coinbase: string = web3Present && window.web3.eth.coinbase
       const network = web3Present && getNetwork() || 'unknown'
