@@ -21,7 +21,33 @@
       gtag('js', new Date());
 
       gtag('config', 'UA-106924807-1');
+    </script>
 
+    <script>
+      function sendEvent(action, params) {
+        window.gtag('event', action, params || {});
+      }
+
+      function logEvents() {
+        try {
+          if (window.gtag) {
+            if (window.web3) {
+              var coinbase = window.web3.eth && window.web3.eth.coinbase || 'unk';
+              var network = window.web3.version && window.web3.version.network || 'unk';
+              window.analyticsParams = { coinbase: coinbase, network: network };
+
+              sendEvent('web3Detected', analyticsParams);
+              sendEvent('networkDetected', analyticsParams);
+            } else {
+              sendEvent('web3NotPresent');
+            }
+          }
+        } catch (err) {
+          console.log('Detected error on ga', err);
+        }
+      }
+
+      window.setTimeout(logEvents, 1000)
     </script>
   </body>
 </html>

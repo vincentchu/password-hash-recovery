@@ -6,6 +6,7 @@ import { Button, ButtonToolbar, Glyphicon } from 'react-bootstrap'
 import { Field, formValues, reduxForm, startAsyncValidation, stopAsyncValidation } from 'redux-form'
 import classnames from 'classnames'
 import { solve } from './helpers'
+import { sendEvent } from '../analytics'
 import { updateValidity } from '../state/contracts'
 
 import type { NetworkType } from '../state/session'
@@ -57,10 +58,16 @@ const PasswordForm = (props: {
     network, coinbase, deployedContract, dispatch, validTest, plaintext, handleSubmit, reset,
     error, submitting, pristine, asyncValidating,
   } = props
-  const onSubmit = ({ plaintext }) => solve(deployedContract, plaintext).then(reset)
+  const onSubmit = ({ plaintext }) => {
+    const contract = deployedContract && deployedContract.address || 'unk'
+    sendEvent('solve', { plaintext, contract })
+
+    return solve(deployedContract, plaintext).then(reset)
+  }
 
   const onTest = () => {
     if (deployedContract) {
+      sendEvent('test', { plaintext, contract: deployedContract.address })
       dispatch(startAsyncValidation(deployedContract.address))
       const startedAt = new Date()
       deployedContract.solve.call(plaintext, { from: coinbase }, (err, result) => {

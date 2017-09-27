@@ -2,6 +2,7 @@
 import React from 'react'
 import { Button } from 'react-bootstrap'
 import CopyToClipboard from 'react-copy-to-clipboard'
+import { sendEvent } from '../analytics'
 
 class CopyToClipboardButton extends React.Component {
   constructor(props: Object) {
@@ -14,6 +15,7 @@ class CopyToClipboardButton extends React.Component {
   }
 
   onClick = () => {
+    sendEvent('copyButtonClick')
     this.setState({ buttonText: 'Copied' })
     setTimeout(() => {
       this.setState({ buttonText: 'Copy' })
